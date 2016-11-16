@@ -27,7 +27,7 @@
 	</properties>
 
 	<modules>
-
+		<module>config-service</module>
 	</modules>
 
 	<dependencies>
@@ -74,15 +74,8 @@
 						<artifactId>docker-maven-plugin</artifactId>
 						<version>0.17.1</version>
 						<executions>
-						<!-- 
-						<execution>
-								<id>buildImage</id>
-								<goals>
-									<goal>build-nofork</goal>
-								</goals>
-								<phase>install</phase>
-							</execution>
-						 -->
+							<!-- <execution> <id>buildImage</id> <goals> <goal>build-nofork</goal> 
+								</goals> <phase>install</phase> </execution> -->
 						</executions>
 						<configuration>
 							<authConfig>
