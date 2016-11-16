@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>de.hska.vislab</groupId>
+	<artifactId>web-shop-microservices</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>web-shop-microservices</name>
+	<description>Web shop base project in Spring Boot</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.2.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<docker.user>fisi1017</docker.user>
+		<docker.port>80</docker.port>
+	</properties>
+
+	<modules>
+
+	</modules>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Camden.SR2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<profiles>
+		<profile>
+			<activation>
+				<file>
+					<exists>src</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.fabric8</groupId>
+						<artifactId>docker-maven-plugin</artifactId>
+						<version>0.17.1</version>
+						<executions>
+						<!-- 
+						<execution>
+								<id>buildImage</id>
+								<goals>
+									<goal>build-nofork</goal>
+								</goals>
+								<phase>install</phase>
+							</execution>
+						 -->
+						</executions>
+						<configuration>
+							<authConfig>
+								<username>${docker.user}}</username>
+								<password>${env.DOCKER_PWD}</password>
+							</authConfig>
+							<images>
+								<image>
+									<alias>${project.name}</alias>
+									<name>${docker.user}/${project.artifactId}</name>
+									<build>
+										<from>frolvlad/alpine-oraclejdk8:slim</from>
+										<tags>
+											<tag>latest</tag>
+										</tags>
+										<ports>
+											<port>${docker.port}</port>
+										</ports>
+										<volumes>
+											<volume>/tmp</volume>
+										</volumes>
+										<entryPoint>
+											<exec>
+												<arg>java</arg>
+												<arg>-Djava.security.egd=file:/dev/./urandom</arg>
+												<arg>-jar</arg>
+												<arg>/app.jar</arg>
+											</exec>
+										</entryPoint>
+										<assembly>
+											<basedir>/</basedir>
+											<inline>
+												<dependencySets>
+													<dependencySet>
+														<useProjectArtifact>true</useProjectArtifact>
+														<includes>
+															<include>${project.groupId}:${project.artifactId}</include>
+														</includes>
+														<outputDirectory>.</outputDirectory>
+														<outputFileNameMapping>app.jar</outputFileNameMapping>
+													</dependencySet>
+												</dependencySets>
+											</inline>
+										</assembly>
+										<runCmds>
+											<runCmd>sh -c 'touch /app.jar'</runCmd>
+										</runCmds>
+									</build>
+								</image>
+							</images>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>
