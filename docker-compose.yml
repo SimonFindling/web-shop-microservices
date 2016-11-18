@@ -9,8 +9,8 @@ services:
       - 8888:8888
     logging:
       options:
-        max-size: 10m
-        max-file: '10'
+        max-size: "10m"
+        max-file: "10"
   oauth2-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
@@ -21,8 +21,8 @@ services:
       - 5000:5000
     logging:
       options:
-        max-size: 10m
-        max-file: '10'
+        max-size: "10m"
+        max-file: "10"
   auth-mongodb:
     environment:
       MONGODB_PASSWORD: $MONGODB_PASSWORD
@@ -32,8 +32,8 @@ services:
       - 25000:27017
     logging:
       options:
-        max-size: 10m
-        max-file: '10'
+        max-size: "10m"
+        max-file: "10"
   discovery-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
@@ -43,8 +43,8 @@ services:
       - 8761:8761
     logging:
       options:
-        max-size: 10m
-        max-file: '10'
+        max-size: "10m"
+        max-file: "10"
   api-gateway-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
@@ -54,5 +54,16 @@ services:
       - 4000:4000
     logging:
       options:
-        max-size: 10m
-        max-file: '10'
+        max-size: "10m"
+        max-file: "10"
+  hystrix-dashboard:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: fisi1017/hystrix-dashboard
+    restart: always
+    ports:
+      - 9000:9000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"

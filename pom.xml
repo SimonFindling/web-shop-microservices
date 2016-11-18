@@ -32,6 +32,7 @@
 		<module>oauth2-service</module>
 		<module>discovery-service</module>
 		<module>api-gateway-service</module>
+		<module>hystrix-dashboard</module>
 	</modules>
 
 	<dependencies>
