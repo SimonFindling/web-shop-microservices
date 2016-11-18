@@ -5,35 +5,35 @@ services:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: fisi1017/config-service
     restart: always
+    ports:
+      - 8888:8888
     logging:
       options:
         max-size: 10m
         max-file: '10'
-    ports:
-      - 8888:8888
   oauth2-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
     image: fisi1017/oauth2-service
     restart: always
+    ports:
+      - 5000:5000
     logging:
       options:
         max-size: 10m
         max-file: '10'
-    ports:
-      - 5000:5000
   auth-mongodb:
     environment:
       MONGODB_PASSWORD: $MONGODB_PASSWORD
     image: fisi1017/oauth2-service-mongodb
     restart: always
+    ports:
+      - 25000:27017
     logging:
       options:
         max-size: 10m
         max-file: '10'
-    ports:
-      - 25000:27017
   discovery-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
@@ -41,6 +41,17 @@ services:
     restart: always
     ports:
       - 8761:8761
+    logging:
+      options:
+        max-size: 10m
+        max-file: '10'
+  api-gateway-service:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: fisi1017/api-gateway-service
+    restart: always
+    ports:
+      - 4000:4000
     logging:
       options:
         max-size: 10m
