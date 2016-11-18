@@ -9,6 +9,8 @@ services:
       options:
         max-size: 10m
         max-file: '10'
+    ports:
+      - 8888:8888
   oauth2-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
@@ -19,6 +21,8 @@ services:
       options:
         max-size: 10m
         max-file: '10'
+    ports:
+      - 5000:5000
   auth-mongodb:
     environment:
       MONGODB_PASSWORD: $MONGODB_PASSWORD
