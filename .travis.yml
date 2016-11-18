@@ -10,5 +10,4 @@ jdk: oraclejdk8
 
 after_success:
     # - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - mvn docker:build
-  - mvn docker:push
+  - mvn clean package docker:build docker:push
