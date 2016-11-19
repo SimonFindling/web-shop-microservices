@@ -30,15 +30,21 @@ mit dem eigenen [Docker Hub](https://hub.docker.com/) Account gesetzt werden.
 * In der `docker-compose.yml` müssen die Namen der Images auf den Wert von `<docker.user>` geändert werden.
 
 Als nächstes müssen die Container mit Maven gebildet werden. Hierfür sollte der Befehl 
-``` bash mvn clean package docker:build```
+```bash 
+mvn clean package docker:build
+```
  ausgeführt werden.
 
 Um die Container Images auf Docker Hub zu pushen muss 
-``` bash mvn clean package docker:build docker:push``` 
+```bash 
+mvn clean package docker:build docker:push
+``` 
 verwendet werden.
 
 Schließlich muss im Projekt-Verzeichnis noch 
-``` bash docker-compose up -d``` 
+```bash 
+docker-compose up -d
+``` 
 ausgeführt werden, um die in der `docker-compose.yml` aufgelisteten Container zu starten.
 
 ## Testen der Anwendung
