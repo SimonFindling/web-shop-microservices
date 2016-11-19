@@ -67,3 +67,23 @@ services:
       options:
         max-size: "10m"
         max-file: "10"
+  turbine-server:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: fisi1017/turbine-server
+    restart: always
+    ports:
+      - 8989:8989
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - 5672:5672
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"

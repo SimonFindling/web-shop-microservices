@@ -1,0 +1,6 @@
+server:
+  port: 8989
+turbine:
+    clusterNameExpression: new String("default")
+    appConfig: api-gateway-service
+    

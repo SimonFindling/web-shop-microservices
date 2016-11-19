@@ -33,6 +33,7 @@
 		<module>discovery-service</module>
 		<module>api-gateway-service</module>
 		<module>hystrix-dashboard</module>
+		<module>turbine-server</module>
 	</modules>
 
 	<dependencies>
