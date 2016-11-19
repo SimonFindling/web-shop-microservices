@@ -2,5 +2,6 @@ server:
   port: 8989
 turbine:
     clusterNameExpression: new String("default")
+    # TODO: Add all Hystrix Applications
     appConfig: api-gateway-service
     
