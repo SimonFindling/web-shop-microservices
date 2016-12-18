@@ -1,0 +1,8 @@
+server:
+  port: 10000
+ribbon:
+  eureka:
+    enabled: false
+eureka:
+  client:
+    register-with-eureka: false

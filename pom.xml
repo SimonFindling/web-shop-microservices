@@ -36,6 +36,7 @@
 		<module>hystrix-dashboard</module>
 		<module>turbine-server</module>
 		<module>user-core-service</module>
+		<module>product-core-service</module>
 		<module>user-composite-service</module>
 	</modules>
 
