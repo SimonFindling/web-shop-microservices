@@ -1,4 +1,4 @@
-package de.haska.vislab.usercore;
+package de.hska.vislab.usercore;
 
 
 import org.springframework.boot.SpringApplication;

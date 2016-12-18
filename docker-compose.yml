@@ -3,7 +3,7 @@ services:
   config-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: fisi1017/config-service
+    image: mefiroofficial/config-service
     restart: always
     ports:
       - 8888:8888
@@ -15,7 +15,7 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: fisi1017/oauth2-service
+    image: mefiroofficial/oauth2-service
     restart: always
     ports:
       - 5000:5000
@@ -26,7 +26,7 @@ services:
   auth-mongodb:
     environment:
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: fisi1017/oauth2-service-mongodb
+    image: mefiroofficial/oauth2-service-mongodb
     restart: always
     ports:
       - 25000:27017
@@ -37,7 +37,7 @@ services:
   discovery-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: fisi1017/discovery-service
+    image: mefiroofficial/discovery-service
     restart: always
     ports:
       - 8761:8761
@@ -48,7 +48,7 @@ services:
   api-gateway-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: fisi1017/api-gateway-service
+    image: mefiroofficial/api-gateway-service
     restart: always
     ports:
       - 4000:4000
@@ -59,7 +59,7 @@ services:
   hystrix-dashboard:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: fisi1017/hystrix-dashboard
+    image: mefiroofficial/hystrix-dashboard
     restart: always
     ports:
       - 9000:9000
@@ -70,10 +70,21 @@ services:
   turbine-server:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: fisi1017/turbine-server
+    image: mefiroofficial/turbine-server
     restart: always
     ports:
       - 8989:8989
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+  user-core-service:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: mefiroofficial/user-core-service
+    restart: always
+    ports:
+      - 9876:9876
     logging:
       options:
         max-size: "10m"
