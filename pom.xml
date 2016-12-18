@@ -36,6 +36,7 @@
 		<module>hystrix-dashboard</module>
 		<module>turbine-server</module>
 		<module>user-core-service</module>
+		<module>user-composite-service</module>
 	</modules>
 
 	<dependencies>
@@ -73,8 +74,13 @@
 						<artifactId>docker-maven-plugin</artifactId>
 						<version>${fabric.version}</version>
 						<executions>
-							<!-- <execution> <id>buildImage</id> <goals> <goal>build-nofork</goal> 
-								</goals> <phase>install</phase> </execution> -->
+							<execution>
+								<id>buildImage</id>
+								<goals>
+									<goal>build-nofork</goal>
+								</goals>
+								<phase>install</phase>
+							</execution>
 						</executions>
 						<configuration>
 							<authConfig>
