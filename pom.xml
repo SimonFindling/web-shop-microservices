@@ -24,6 +24,7 @@
 		<java.version>1.8</java.version>
 		<fabric.version>0.17.2</fabric.version>
 		<docker.user>mefiroofficial</docker.user>
+		<docker.pwd>orifem</docker.pwd>
 		<docker.port>80</docker.port>
 	</properties>
 
@@ -78,7 +79,7 @@
 						<configuration>
 							<authConfig>
 								<username>${docker.user}</username>
-								<password>orifem</password>
+								<password>${docker.pwd}</password>
 							</authConfig>
 							<images>
 								<image>
@@ -158,7 +159,7 @@
 						<configuration>
 							<authConfig>
 								<username>${docker.user}</username>
-								<password>${env.DOCKER_PWD}</password>
+								<password>${docker.pwd}</password>
 							</authConfig>
 							<images>
 								<image>
