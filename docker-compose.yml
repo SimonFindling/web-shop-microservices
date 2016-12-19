@@ -149,3 +149,14 @@ services:
       options:
         max-size: 10m
         max-file: '10'
+  category-core-service:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: mefiroofficial/category-core-service
+    restart: always
+    ports:
+    - 10200:10200
+    logging:
+      options:
+        max-size: 10m
+        max-file: '10'

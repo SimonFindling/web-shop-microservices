@@ -122,21 +122,7 @@ Damit die Datenbankanbindung funktioniert, sollte der Core-Service außerdem fol
 		</dependency>
 ```
 
-Wenn man die Datenbank mit Testdaten befüllen möchte bietet es sich an, in `main/resources`, jeweils eine `schema.sql` und `data.sql` anzulegen. Diese Skripte werden beim Starten des Core-Services ausgeführt. `schema.sql` enthält hierbei normalerweise die Tabellendefinitionen. Zum Beispiel im `product-core-service`:
-```bash
-
-DROP TABLE IF EXISTS `product`;
-
-CREATE TABLE `product` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `categoryid` bigint(20) DEFAULT NULL,
-  `details` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `price` double NOT NULL,
-  PRIMARY KEY (`id`)
-```
-
-In der `data.sql` können Beispieleinträge hinterlegt werden. Hierzu wieder ein Beispiel:
+Wenn man die Datenbank mit Testdaten befüllen möchte bietet es sich an, in `main/resources`, eine `import.sql` anzulegen. Dieses Skript wird beim Starten des Core-Services ausgeführt. `import.sql` enthält hierbei normalerweise die Tabellendefinitionen. Zum Beispiel im `product-core-service`:
 ```bash
 Insert INTO `product` VALUES(1, 1,'Leckeres Toastbrot', 'Toast', 0.49);
 ```

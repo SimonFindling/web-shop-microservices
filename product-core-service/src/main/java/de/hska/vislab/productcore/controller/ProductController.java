@@ -56,7 +56,7 @@ public class ProductController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<Long> postProduct(@RequestBody(required = true) Product product) {
-		if (!validate(product) || product.id != null) {
+		if (!validate(product) || !validate(product.id)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		LOGGER.info(product.toString());

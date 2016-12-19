@@ -12,4 +12,4 @@ before_script:
     - docker-compose up -d
 after_success:
     # - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - mvn clean package docker:build docker:push
+  - mvn docker:push
