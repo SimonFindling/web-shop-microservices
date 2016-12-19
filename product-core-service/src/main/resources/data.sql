@@ -1,2 +1,2 @@
 
-Insert INTO `Product` VALUES(1, 1,'Leckeres Toastbrot', 'Toast', 0.49);
+Insert INTO `product` VALUES(1, 1,'Leckeres Toastbrot', 'Toast', 0.49);

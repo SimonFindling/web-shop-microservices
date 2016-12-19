@@ -37,6 +37,20 @@ services:
       options:
         max-size: 10m
         max-file: '10'
+  mysqldb:
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: webshop
+      MYSQL_USER: shop
+      MYSQL_PASSWORD: shop
+    image: mysql
+    restart: always
+    ports:
+    - 3307:3306
+    logging:
+      options:
+        max-size: 10m
+        max-file: '10'
   discovery-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
