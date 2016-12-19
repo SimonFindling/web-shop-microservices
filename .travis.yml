@@ -2,12 +2,14 @@ sudo: required
 
 services:
   - docker
+  - docker-compose
 
 # travis runs implicitly 'mvn test' and 'mvn install' if it finds a 'pom.xml' in the root.
 # see https://docs.travis-ci.com/user/languages/java/
 language: java
 jdk: oraclejdk8
-
+before_script:
+    - docker-compose up -d
 after_success:
     # - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - mvn clean package docker:build docker:push
