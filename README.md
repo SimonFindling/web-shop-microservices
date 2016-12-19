@@ -59,7 +59,7 @@ In der Spring Tool Suite (STS) kann ein neuer Microservice bzw. ein Modul zum Pa
 
 ## Erstellen einer Datenbankverbindung für Core-Services mit JPA Data
 Dem Projekt liegt ein MySQL Docker-Container bei, der wie folgt in der `docker-compose.yml` definiert ist:
-``` bash
+```bash
   mysqldb:
     environment:
       MYSQL_ROOT_PASSWORD: admin
@@ -93,8 +93,7 @@ spring:
       ddl-auto: validate
 ```
 Mit dieser Konfiguration kann der Core-Service als Container auf die Datenbank zugreifen für den `test/resources` Ordner sollte eine zusätzliche Testkonfiguration angelegt werden. Diese wird in der `application.yml` hinterlegt und sieht wie folgt aus:
-```
-bash
+```bash
 spring:
   datasource:
     url: jdbc:mysql://localhost:3307/webshop
@@ -110,8 +109,7 @@ spring:
 Hier wird der MySQL-Container vom Docker-Host aus angesprochen. Auch hier ist eine Beispielkonfiguration im `product-core-service` hinterlegt.
 
 Damit die Datenbankanbindung funktioniert, sollte der Core-Service außerdem folgende Dependencies enthalten:
-```
-bash
+```bash
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -125,8 +123,8 @@ bash
 ```
 
 Wenn man die Datenbank mit Testdaten befüllen möchte bietet es sich an, in `main/resources`, jeweils eine `schema.sql` und `data.sql` anzulegen. Diese Skripte werden beim Starten des Core-Services ausgeführt. `schema.sql` enthält hierbei normalerweise die Tabellendefinitionen. Zum Beispiel im `product-core-service`:
-```
-bash
+```bash
+
 DROP TABLE IF EXISTS `product`;
 
 CREATE TABLE `product` (
@@ -139,8 +137,7 @@ CREATE TABLE `product` (
 ```
 
 In der `data.sql` können Beispieleinträge hinterlegt werden. Hierzu wieder ein Beispiel:
-```
-bash
+```bash
 Insert INTO `product` VALUES(1, 1,'Leckeres Toastbrot', 'Toast', 0.49);
 ```
 
