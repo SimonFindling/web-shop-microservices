@@ -1,5 +1,7 @@
 package de.hska.vislab.categorycore.controller;
 
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import de.hska.vislab.categorycore.model.Category;
 
 @RestController
 public class CategoryController {
+	private final static Logger LOGGER = Logger.getLogger(CategoryController.class.getSimpleName());
+
 
 	@Autowired
 	private CategoryRepository repo;
@@ -28,7 +32,7 @@ public class CategoryController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<Long> postCategory(@RequestBody(required = true) Category category) {
-		if (!validate(category) || !validate(category.id)) {
+		if (!validate(category) || validate(category.id)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
@@ -44,11 +48,21 @@ public class CategoryController {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Category> getCategory(@PathVariable(name = "id", required = true) long id) {
-		return new ResponseEntity<>(repo.findOne(id), HttpStatus.OK);
+		Category category = repo.findOne(id);
+		LOGGER.info("category=" + category);
+		if (validate(category)) {
+			return new ResponseEntity<>(category, HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteCategory(@PathVariable(name = "id", required = true) long id) {
+		if (repo.findOne(id) == null) {
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		}
 		repo.delete(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}

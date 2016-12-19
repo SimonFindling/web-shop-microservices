@@ -25,11 +25,20 @@ public class ProductController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Product> getProduct(@PathVariable(required = true, name = "id") long id) {
-		return new ResponseEntity<>(repo.findOne(id), HttpStatus.OK);
+		Product product = repo.findOne(id);
+		if (validate(product)) {
+			return new ResponseEntity<>(product, HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteProduct(@PathVariable(required = true, name = "id") long id) {
+		if (repo.findOne(id) == null) {
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		}
 		repo.delete(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
@@ -56,7 +65,7 @@ public class ProductController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<Long> postProduct(@RequestBody(required = true) Product product) {
-		if (!validate(product) || !validate(product.id)) {
+		if (!validate(product) || validate(product.id)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		LOGGER.info(product.toString());
