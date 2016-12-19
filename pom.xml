@@ -38,6 +38,7 @@
 		<module>user-core-service</module>
 		<module>product-core-service</module>
 		<module>user-composite-service</module>
+		<module>category-core-service</module>
 	</modules>
 
 	<dependencies>

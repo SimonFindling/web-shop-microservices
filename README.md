@@ -11,7 +11,7 @@ Das Projekt enthält neben den fachlichen Microservices, welche für einen Web S
 * Einen Discovery-Service mit [Spring Cloud Netflix Eureka](https://cloud.spring.io/spring-cloud-netflix/)
 * Ein API-Gateway mit [Spring Cloud Netflix Zuul](https://cloud.spring.io/spring-cloud-netflix/)
 * Einen OAuth2-Service mit [Spring Cloud Security](https://cloud.spring.io/spring-cloud-security/)
-* Ein Hystrix Dashboard, Hystrix Integration für Microservicesund einen Turbine Server mit [Spring Cloud Netflix Hystrix](https://cloud.spring.io/spring-cloud-netflix/)
+* Ein Hystrix Dashboard, Hystrix Integration für Microservices und einen Turbine Server mit [Spring Cloud Netflix Hystrix](https://cloud.spring.io/spring-cloud-netflix/)
 * ...
 
 ## Voraussetzungen
@@ -19,7 +19,7 @@ Um das Projekt auszuführen, benötigt man:
 * [Maven](https://maven.apache.org/)
 * [Docker](https://www.docker.com/)
 * [Docker-Compose](https://github.com/docker/compose)
-* ???
+* Als IDE eignet sich bspw. [Spring Tool Suite](https://spring.io/tools/sts/all)
 
 ## Ausführen der Microservices
 Um die Docker Container mit den enthaltenen Microservices zu erstellen, müssen folgende Vorbereitungen getroffen werden:
@@ -46,6 +46,105 @@ Schließlich muss im Projekt-Verzeichnis noch
 docker-compose up -d
 ``` 
 ausgeführt werden, um die in der `docker-compose.yml` aufgelisteten Container zu starten.
+
+## Anlegen eines neuen Microservices
+In der Spring Tool Suite (STS) kann ein neuer Microservice bzw. ein Modul zum Parent Projekt hinzugefügt werden, in dem man:
+* einen Rechtsklick auf das Parent-Projekt macht
+* und dann `New --> Project` wählt.
+* Es öffnet sich ein Auswahlfenster. Hier wählt man Maven --> Maven Module
+* Man klickt auf `Next`, gibt einen Namen für das Module ein
+* und setzt einen Haken bei `Create a simple project (skip archetype selection)`.
+* Danach befolgt man den Wizard weiter, setzt möglicherweise noch einen Namen und eine Beschreibung
+* und das Modul wird erstellt.
+
+## Erstellen einer Datenbankverbindung für Core-Services mit JPA Data
+Dem Projekt liegt ein MySQL Docker-Container bei, der wie folgt in der `docker-compose.yml` definiert ist:
+``` bash
+  mysqldb:
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: webshop
+      MYSQL_USER: shop
+      MYSQL_PASSWORD: shop
+    image: mysql
+    restart: always
+    ports:
+    - 3307:3306
+    logging:
+      options:
+        max-size: 10m
+        max-file: '10'
+```
+Dieser wird im Container-Netzwerk über den Standardport `3306` angesprochen. Vom Docker-Host kann man über `3307` auf die MySQL-Datenbank zugreifen.
+
+Wenn man nun einen Core-Service erstellen will, der auf den MySQL-Container zugreift kann man den `product-core-service` als Referenz nehmen.
+In der `product-core-service.yml` im `shared` Ordner des `config-service` ist die Konfiguration definiert. Hier ein Ausschnitt:
+```bash
+spring:
+  datasource:
+    url: jdbc:mysql://mysqldb:3306/webshop
+    username: shop
+    password: shop
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: validate
+```
+Mit dieser Konfiguration kann der Core-Service als Container auf die Datenbank zugreifen für den `test/resources` Ordner sollte eine zusätzliche Testkonfiguration angelegt werden. Diese wird in der `application.yml` hinterlegt und sieht wie folgt aus:
+```
+bash
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3307/webshop
+    username: shop
+    password: shop
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: validate
+```
+Hier wird der MySQL-Container vom Docker-Host aus angesprochen. Auch hier ist eine Beispielkonfiguration im `product-core-service` hinterlegt.
+
+Damit die Datenbankanbindung funktioniert, sollte der Core-Service außerdem folgende Dependencies enthalten:
+```
+bash
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+```
+
+Wenn man die Datenbank mit Testdaten befüllen möchte bietet es sich an, in `main/resources`, jeweils eine `schema.sql` und `data.sql` anzulegen. Diese Skripte werden beim Starten des Core-Services ausgeführt. `schema.sql` enthält hierbei normalerweise die Tabellendefinitionen. Zum Beispiel im `product-core-service`:
+```
+bash
+DROP TABLE IF EXISTS `product`;
+
+CREATE TABLE `product` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `categoryid` bigint(20) DEFAULT NULL,
+  `details` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `price` double NOT NULL,
+  PRIMARY KEY (`id`)
+```
+
+In der `data.sql` können Beispieleinträge hinterlegt werden. Hierzu wieder ein Beispiel:
+```
+bash
+Insert INTO `product` VALUES(1, 1,'Leckeres Toastbrot', 'Toast', 0.49);
+```
+
+Danach kann Spring Data JPA genutzt werden. Datenbanktabellen werden hier objektrelational auf Objekte gemappt. Siehe hierzu die `Product.java` Klasse des `product-core-service`. Um Datenbank-Operationen auszuführen kann ein Repository-Interface analog zu `ProductRepository.java` erstellt werden.
 
 ## Testen der Anwendung
 Die einzelnen Microservices sind wie folgt zu erreichen:
