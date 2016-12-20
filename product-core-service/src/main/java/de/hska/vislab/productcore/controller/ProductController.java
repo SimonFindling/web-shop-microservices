@@ -23,31 +23,12 @@ public class ProductController {
 	@Autowired
 	private ProductRepository repo;
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Product> getProduct(@PathVariable(required = true, name = "id") long id) {
-		Product product = repo.findOne(id);
-		if (validate(product)) {
-			return new ResponseEntity<>(product, HttpStatus.OK);
-		}
-		else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteProduct(@PathVariable(required = true, name = "id") long id) {
-		if (repo.findOne(id) == null) {
-			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-		}
-		repo.delete(id);
-		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-	}
-
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ResponseEntity<Iterable<Product>> getAllProducts(@RequestParam(name = "name", required = false) String name,
 			@RequestParam(name = "min", required = false) Double min,
 			@RequestParam(name = "max", required = false) Double max,
-			@RequestParam(name = "details", required = false) String details) {
+			@RequestParam(name = "details", required = false) String details,
+			@RequestParam(name = "category-id", required = false) Long categoryID) {
 		Iterable<Product> products;
 		if (validate(min) || validate(max) || validate(details) || validate(name)) {
 			min = min == null ? Double.MIN_NORMAL : min;
@@ -56,6 +37,8 @@ public class ProductController {
 			name = "%" + (name != null ? name.toLowerCase() : "") + "%";
 
 			products = repo.getProductByNameAndDetailAndPriceBetween(name, details, min, max);
+		} else if (validate(categoryID)) {
+			products = repo.getProductByCategoryID(categoryID);
 		} else {
 			products = repo.findAll();
 		}
@@ -78,6 +61,25 @@ public class ProductController {
 		}
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Product> getProduct(@PathVariable(required = true, name = "id") long id) {
+		Product product = repo.findOne(id);
+		if (validate(product)) {
+			return new ResponseEntity<>(product, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deleteProduct(@PathVariable(required = true, name = "id") long id) {
+		if (repo.findOne(id) == null) {
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		}
+		repo.delete(id);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+
 	private boolean validate(String str) {
 		return validate((Object) str) && !str.isEmpty();
 	}
@@ -86,4 +88,7 @@ public class ProductController {
 		return val != null;
 	}
 
+	private boolean validate(Long id) {
+		return id != null && id > 0;
+	}
 }

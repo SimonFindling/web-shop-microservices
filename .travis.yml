@@ -11,5 +11,5 @@ jdk: oraclejdk8
 before_script:
     - docker-compose up -d
 after_success:
-    # - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - mvn docker:push
+  - docker login -u $DOCKER_USER -p $DOCKER_PWD
+  - docker push

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.hska.uilab.composite.user.restclient.CoreUserRestClient;
+import de.hska.uilab.composite.user.restclient.UserCoreRestClient;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class UserCompositeController {
 	
 	@Autowired
-	private CoreUserRestClient userClient;
+	private UserCoreRestClient userClient;
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
 	public ResponseEntity<String> info() {

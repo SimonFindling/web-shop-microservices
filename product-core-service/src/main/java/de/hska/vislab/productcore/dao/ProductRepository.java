@@ -7,6 +7,8 @@ import de.hska.vislab.productcore.model.Product;
 
 public interface ProductRepository extends CrudRepository<Product, Long> {
 
+	Iterable<Product> getProductByCategoryID(Long categoryID);
+	
 	@Query("FROM Product p WHERE LOWER(p.name) LIKE LOWER(?1)")
 	Iterable<Product> getProductByName(String name);
 	

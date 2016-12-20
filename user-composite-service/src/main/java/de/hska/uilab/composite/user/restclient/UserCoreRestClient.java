@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient("user-core-service")
-public interface CoreUserRestClient {
+public interface UserCoreRestClient {
 	@RequestMapping(method = RequestMethod.GET, value="users/{username}")
 	public String getUserByUsername(@PathVariable("username") String username);
 }
