@@ -18,7 +18,7 @@ services:
     image: mefiroofficial/oauth2-service
     depends_on:
     - config-service
-    - auth-mongodb
+#    - auth-mongodb
     restart: always
     ports:
     - 5000:5000
@@ -26,17 +26,17 @@ services:
       options:
         max-size: 10m
         max-file: '10'
-  auth-mongodb:
-    environment:
-      MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: mefiroofficial/oauth2-service-mongodb
-    restart: always
-    ports:
-    - 25000:27017
-    logging:
-      options:
-        max-size: 10m
-        max-file: '10'
+#  auth-mongodb:
+#    environment:
+#      MONGODB_PASSWORD: $MONGODB_PASSWORD
+#    image: mefiroofficial/oauth2-service-mongodb
+#    restart: always
+#    ports:
+#    - 25000:27017
+#    logging:
+#      options:
+#        max-size: 10m
+#        max-file: '10'
   mysqldb:
     environment:
       MYSQL_ROOT_PASSWORD: admin
@@ -156,6 +156,17 @@ services:
     restart: always
     ports:
     - 10200:10200
+    logging:
+      options:
+        max-size: 10m
+        max-file: '10'
+  role-core-service:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: mefiroofficial/role-core-service
+    restart: always
+    ports:
+    - 10400:10400
     logging:
       options:
         max-size: 10m

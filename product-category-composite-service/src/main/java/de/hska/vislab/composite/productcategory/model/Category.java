@@ -4,13 +4,19 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 public class Category implements Serializable {
 
 	private static final long serialVersionUID = -951317120077253354L;
 
 	public Long id;
 	public String name;
+	@JsonIgnore
 	public Set<Long> productIDs = new HashSet<>();
+	@JsonIgnore
 	public Set<Product> products = new HashSet<>();
 
 	protected Category() {
@@ -29,7 +35,7 @@ public class Category implements Serializable {
 		this.name = name;
 		this.productIDs = productIDs;
 	}
-	
+
 	public Category(Long id, String name, Set<Product> products, Set<Long> productIDs) {
 		super();
 		this.id = id;

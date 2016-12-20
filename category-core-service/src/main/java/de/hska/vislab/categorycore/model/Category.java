@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Category implements Serializable {
 
@@ -21,6 +23,7 @@ public class Category implements Serializable {
 	
 	public String name;
 	
+	@JsonIgnore
 	@ElementCollection
 	public Set<Long> productIDs = new HashSet<>();
 

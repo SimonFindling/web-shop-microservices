@@ -1,4 +1,6 @@
-package de.hska.vislab.composite.productcategory;
+package de.hska.vislab.composite.productcategory.controller;
+
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,18 @@ import de.hska.vislab.composite.productcategory.restclient.ProductCoreRestClient
 @RestController
 public class ProductCategoryController {
 
+	private static final Logger LOGGER = Logger.getLogger(ProductCategoryController.class.getSimpleName());
+
 	@Autowired
 	private ProductCoreRestClient productClient;
 
 	@Autowired
 	private CategoryCoreRestClient categoryClient;
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ResponseEntity<String> getInfo() {
+		return new ResponseEntity<>("This is product-category-composite-service", HttpStatus.OK);
+	}
 
 	@RequestMapping(value = "/product", method = RequestMethod.GET)
 	public ResponseEntity<Iterable<Product>> getProducts(@RequestParam(name = "name", required = false) String name,
@@ -43,11 +52,10 @@ public class ProductCategoryController {
 		products = response.getBody();
 
 		for (Product p : products) {
-			if (validate(p.categoryID)) {
-				ResponseEntity<Category> resp = categoryClient.getCategory(p.categoryID);
+			if (validate(p.getCategoryID())) {
+				ResponseEntity<Category> resp = categoryClient.getCategory(p.getCategoryID());
 				if (resp.getStatusCode() == HttpStatus.OK) {
 					p.category = resp.getBody();
-					p.categoryID = null;
 				}
 			}
 		}
@@ -64,7 +72,7 @@ public class ProductCategoryController {
 		if (categoryClient.getCategory(product.category.id).getStatusCode() != HttpStatus.OK) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		product.category = null;
+		product.setCategoryID(product.category.id);
 		ResponseEntity<Long> response = productClient.postProduct(product);
 		if (response.getStatusCode() != HttpStatus.CREATED) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -80,7 +88,7 @@ public class ProductCategoryController {
 			return new ResponseEntity<>(productResponse.getStatusCode());
 		}
 		Product product = productResponse.getBody();
-		ResponseEntity<Category> categoryResponse = categoryClient.getCategory(product.categoryID);
+		ResponseEntity<Category> categoryResponse = categoryClient.getCategory(product.getCategoryID());
 		if (categoryResponse.getStatusCode() == HttpStatus.OK) {
 			product.category = categoryResponse.getBody();
 		}
@@ -95,15 +103,20 @@ public class ProductCategoryController {
 			return new ResponseEntity<>(productResponse.getStatusCode());
 		}
 		Product product = productResponse.getBody();
-		ResponseEntity<Category> categoryResponse = categoryClient.getCategory(product.categoryID);
+		ResponseEntity<Category> categoryResponse = categoryClient.getCategory(product.getCategoryID());
 		return categoryResponse.getStatusCode() == HttpStatus.OK
 				? new ResponseEntity<>(categoryResponse.getBody(), categoryResponse.getStatusCode())
 				: new ResponseEntity<>(categoryResponse.getStatusCode());
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteProduct(@PathVariable(required = true, name = "id") long id) {
 		return productClient.deleteProduct(id);
+	}
+
+	@RequestMapping(value = "/category", method = RequestMethod.GET)
+	public ResponseEntity<Iterable<Category>> getCategories() {
+		return categoryClient.getCategories("");
 	}
 
 	@RequestMapping(value = "/category", method = RequestMethod.POST)
@@ -111,24 +124,32 @@ public class ProductCategoryController {
 		return categoryClient.postCategory(category);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/category/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Category> getCategory(@PathVariable(name = "id", required = true) long id) {
 		return categoryClient.getCategory(id);
 	}
 
-	@RequestMapping(value = "/{id}/products", method = RequestMethod.GET)
+	@RequestMapping(value = "/category/{id}/products", method = RequestMethod.GET)
 	public ResponseEntity<Iterable<Product>> getProductsOfCategory(
 			@PathVariable(name = "id", required = true) long id) {
 		ResponseEntity<Category> response = categoryClient.getCategory(id);
-
 		if (response.getStatusCode() != HttpStatus.OK) {
 			return new ResponseEntity<>(response.getStatusCode());
 		}
 
-		return productClient.getProducts(response.getBody().id);
+		Category category = response.getBody();
+		ResponseEntity<Iterable<Product>> productsResponse = productClient.getProducts(category.id);
+		LOGGER.info("productsResponse=" + productsResponse);
+		Iterable<Product> products = productsResponse.getBody();
+		LOGGER.info("products=" + products);
+		for (Product p : products) {
+			p.category = category;
+		}
+
+		return new ResponseEntity<>(products, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/category/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteCategory(@PathVariable(name = "id", required = true) long id) {
 		ResponseEntity<Category> response = getCategory(id);
 		if (response.getStatusCode() != HttpStatus.OK) {

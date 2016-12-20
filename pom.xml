@@ -40,6 +40,7 @@
 		<module>user-composite-service</module>
 		<module>category-core-service</module>
 		<module>product-category-composite-service</module>
+		<module>role-core-service</module>
 	</modules>
 
 	<dependencies>

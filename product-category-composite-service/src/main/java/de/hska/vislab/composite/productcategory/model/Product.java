@@ -2,6 +2,9 @@ package de.hska.vislab.composite.productcategory.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 public class Product implements Serializable {
 
 	private static final long serialVersionUID = 3398246529402664188L;
@@ -10,6 +13,7 @@ public class Product implements Serializable {
 	public String name;
 	public double price;
 	public String details;
+	@JsonProperty(access = Access.READ_WRITE)
 	public Long categoryID;
 	public Category category;
 
@@ -41,6 +45,14 @@ public class Product implements Serializable {
 		this.price = price;
 		this.details = details;
 		this.category = category;
+	}
+
+	public Long getCategoryID() {
+		return categoryID;
+	}
+
+	public void setCategoryID(Long categoryID) {
+		this.categoryID = categoryID;
 	}
 
 	@Override

@@ -122,7 +122,7 @@ Damit die Datenbankanbindung funktioniert, sollte der Core-Service außerdem fol
 		</dependency>
 ```
 
-Wenn man die Datenbank mit Testdaten befüllen möchte bietet es sich an, in `main/resources`, eine `import.sql` anzulegen. Dieses Skript wird beim Starten des Core-Services ausgeführt. `import.sql` enthält hierbei normalerweise die Tabellendefinitionen. Zum Beispiel im `product-core-service`:
+Wenn man die Datenbank mit Testdaten befüllen möchte bietet es sich an, in `main/resources`, eine `import.sql` anzulegen. Dieses Skript wird beim Starten des Core-Services ausgeführt. `import.sql` enthält hierbei normalerweise Tabelleneinträge. Zum Beispiel im `product-core-service`:
 ```bash
 Insert INTO `product` VALUES(1, 1,'Leckeres Toastbrot', 'Toast', 0.49);
 ```
