@@ -1,5 +1,5 @@
 server:
-  port: 9876
+  port: 10400
 ribbon:
   eureka:
     enabled: false
