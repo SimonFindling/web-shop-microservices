@@ -37,15 +37,25 @@ public class RoleController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	@RequestMapping(value = "/{level}", method = RequestMethod.GET) 
-	public ResponseEntity<Role> getRole(@PathVariable(name="level", required = true) int level) {
+
+	@RequestMapping(value = "/{level}", method = RequestMethod.GET)
+	public ResponseEntity<Role> getRole(@PathVariable(name = "level", required = true) int level) {
 		Role role = repo.getRoleByLevel(level);
-		
+
 		if (role != null) {
-		return new ResponseEntity<>(role, HttpStatus.OK);
+			return new ResponseEntity<>(role, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		else {
+	}
+
+	@RequestMapping(method=RequestMethod.GET,value="/{id}")
+	public ResponseEntity<Role> getRole(@PathVariable(name = "id", required = true) long id) {
+		Role role = repo.findOne(id);
+
+		if (role != null) {
+			return new ResponseEntity<>(role, HttpStatus.OK);
+		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}

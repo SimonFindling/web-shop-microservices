@@ -16,8 +16,8 @@ services:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
     image: mefiroofficial/oauth2-service
-    depends_on:
-    - config-service
+#    depends_on:
+#    - config-service
 #    - auth-mongodb
     restart: always
     ports:
@@ -55,8 +55,8 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/discovery-service
-    depends_on:
-    - config-service
+#    depends_on:
+#    - config-service
     restart: always
     ports:
     - 8761:8761
@@ -68,8 +68,8 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/api-gateway-service
-    depends_on:
-    - discovery-service
+#    depends_on:
+#    - discovery-service
     restart: always
     ports:
     - 4000:4000
@@ -94,8 +94,8 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/turbine-server
-    depends_on:
-    - discovery-service
+#    depends_on:
+#    - discovery-service
     restart: always
     ports:
     - 8989:8989
@@ -107,6 +107,8 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/user-core-service
+#    depends_on:
+#    - mysqldb
     restart: always
     ports:
     - 9876:9876
@@ -118,6 +120,8 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/user-core-service
+#    depends_on:
+#    - mysqldb
     restart: always
     ports:
     - 9877:9876
@@ -129,8 +133,9 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/user-composite-service
-    depends_on:
-    - user-core-service
+#    depends_on:
+#    - user-core-service
+#    - role-core-service
     restart: always
     ports:
     - 10000:10000
@@ -142,6 +147,8 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/product-core-service
+#    depends_on:
+#    - mysqldb
     restart: always
     ports:
     - 10100:10100
@@ -153,6 +160,8 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/category-core-service
+#    depends_on:
+#    - mysqldb
     restart: always
     ports:
     - 10200:10200
@@ -164,6 +173,8 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/role-core-service
+#    depends_on:
+#    - mysqldb
     restart: always
     ports:
     - 10400:10400
@@ -175,6 +186,9 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/product-category-composite-service
+#    depends_on:
+#    - product-core-service
+#    - category-core-service
     restart: always
     ports:
     - 10300:10300
