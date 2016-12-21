@@ -18,7 +18,7 @@ public interface UserCoreRestClient {
 	public ResponseEntity<Long> postUser(@RequestBody(required = true) User user);
 	
 	@RequestMapping(method = RequestMethod.GET, value = "user/{id}")
-	public ResponseEntity<Long> getUser(@PathVariable("id") long id);
+	public ResponseEntity<User> getUser(@PathVariable("id") long id);
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "user/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable("id") long id);
