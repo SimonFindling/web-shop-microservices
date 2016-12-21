@@ -137,3 +137,24 @@ Die einzelnen Microservices sind wie folgt zu erreichen:
 * Der OAuth2-Service ist unter `http://localhost:5000/uaa` bzw. `http://localhost:4000/oauth2-service/uaa` zu erreichen. Allerdings sollte folgende Meldung erscheinen: `Full authentication is required to access this resource`.
 * Das Hystrix Dashboard ist unter `http://localhost:9000/hystrix` zu erreichen.
 * Der Turbine Stream ist unter `http://localhost:8989/turbine.stream` zu erreichen. 
+
+## Funktionen von Aufgabe 3
+- [] Core Microservices können auf den entsprechenden Komponenten der monolithischen An-
+wendung aufbauen oder neu implementiert werden. (User-Core-Service fehlt noch)
+- [] Composite Microservices und API-Gateways sollen als REST-Clients der Core Microservices 
+realisiert werden. Die Bindung kann (zunächst noch) statisch erfolgen, indem die URLs der Mi-
+croservices fest kodiert werden. (User-Composite-Service fehlt noch) 
+- [x] Als Basis der Infrastruktur soll ein Eureka Server als Spring Boot Anwendung realisiert werden. 
+Alle implementierten Microservices sollen so erweitert werden, dass sie sich als Discovery 
+Clients registrieren.
+- [x] Composite Microservices sollen zu Ribbon-Clients erweitert werden, die die verwendeten Core 
+Microservices dynamisch Binden. Der Zugriff auf die Core Microservices soll per Hystrix 
+gesichert werden. (Feign übernimmt die Sicherung per Hystrix)
+- [x] Es soll ein Zuul Edge Server als Spring Boot Anwendung realisiert werden. Der Edge Server 
+soll eine öffentliche API bereitstellen, die die Client Aufrufe auf die implementierten API Gate-
+ways leitet. (Möglicherweise Core-Services aus API entfernen, aber zum testen ganz gut)
+- [] Es soll ein Hystrix Dashboard als Spring Boot Anwendung (oder als Teil einer geeigneten an-
+deren Komponente) realisiert werden. Auf dem Dashboard sollen die Aktivitäten des Edge 
+Servers und der Hystrix-gesicherten Komponenten beobachtet werden.  (Geht Prinzipiell, aber Threads werden nicht angezeigt)
+- [] Erstellen  Sie  ein  Dokument  mit  einer  Skizze  der  implementierten  Systemarchitektur  (sowohl  Microservices als auch Middleware Services). Das Deckblatt soll den Gruppennamen und die Namen der Gruppenmitglieder mit Matrikelnummer und Email enthalten. Bitte laden Sie eine Kopie 
+des PDF und die Sourcen der Projekte als Datei im ILIAS hoch. 
