@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import de.hska.vislab.composite.productcategory.model.Product;
 
-@FeignClient("product-core-service")
+@FeignClient(name = "product-core-service", fallback = ProductCoreFallback.class, decode404 = true)
 public interface ProductCoreRestClient {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)

@@ -9,7 +9,8 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 10000
-
+server:
+  port: 9000
 eureka:
   instance:
     prefer-ip-address: true

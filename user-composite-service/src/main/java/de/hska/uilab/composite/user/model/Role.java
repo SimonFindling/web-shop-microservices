@@ -9,6 +9,10 @@ public class Role implements Serializable {
 	public Long id;
 	public int level;
 	public String type;
+	
+	protected Role() {
+		super();
+	}
 
 	public Role(int level, String type) {
 		super();

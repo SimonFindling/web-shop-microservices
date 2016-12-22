@@ -9,17 +9,11 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 10000
-
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    serviceUrl:
-      defaultZone: http://discovery-service:8761/eureka/
 ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
-
+server:
+  port: 8761
 #security:
 #  oauth2:
 #    resource:

@@ -9,18 +9,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import de.hska.uilab.composite.user.model.User;
 
-@FeignClient("user-core-service")
+@FeignClient(value = "user-core-service", fallback = UserCoreFallback.class, decode404 = true)
 public interface UserCoreRestClient {
-	@RequestMapping(method = RequestMethod.GET, value="/user/{username}")
+	@RequestMapping(method = RequestMethod.GET, value="/username/{username}")
 	public ResponseEntity<User> getUser(@PathVariable("username") String username);
 	
-	@RequestMapping(method = RequestMethod.POST, value ="/user")
+//	@RequestMapping(method = RequestMethod.DELETE, value="/username/{username}")
+//	public ResponseEntity<User> deleteUser(@PathVariable("username") String username);
+	
+	@RequestMapping(method = RequestMethod.GET, value="/")
+	public ResponseEntity<Iterable<User>> getAllUsers();
+	
+	@RequestMapping(method = RequestMethod.POST, value ="/")
 	public ResponseEntity<Long> postUser(@RequestBody(required = true) User user);
 	
-	@RequestMapping(method = RequestMethod.GET, value = "user/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<User> getUser(@PathVariable("id") long id);
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "user/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable("id") long id);
 
 }

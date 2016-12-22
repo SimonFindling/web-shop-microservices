@@ -19,7 +19,8 @@ eureka:
 ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
-
+server:
+  port: 10300
 #security:
 #  oauth2:
 #    resource:

@@ -8,7 +8,5 @@ import de.hska.vislab.usercore.model.User;
 public interface UserRepository extends CrudRepository<User, Long> {
 
 	
-	@Query("FROM Customer u WHERE LOWER(p.name) LIKE LOWER(?1)")
-	Iterable<User> getUserByName(String name);
-	
+	public User getUserByUsername(String username);	
 }

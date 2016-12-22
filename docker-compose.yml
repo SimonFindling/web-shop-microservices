@@ -1,31 +1,31 @@
 version: '2'
 services:
-  config-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: mefiroofficial/config-service
-    restart: always
-    ports:
-    - 8888:8888
-    logging:
-      options:
-        max-size: 10m
-        max-file: '10'
-  oauth2-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-      MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: mefiroofficial/oauth2-service
+#  config-service:
+#    environment:
+#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+#    image: mefiroofficial/config-service
+#    restart: always
+#    ports:
+#    - 8888:8888
+#    logging:
+#      options:
+#        max-size: 10m
+#        max-file: '10'
+#  oauth2-service:
+#    environment:
+#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+#      MONGODB_PASSWORD: $MONGODB_PASSWORD
+#    image: mefiroofficial/oauth2-service
 #    depends_on:
 #    - config-service
 #    - auth-mongodb
-    restart: always
-    ports:
-    - 5000:5000
-    logging:
-      options:
-        max-size: 10m
-        max-file: '10'
+#    restart: always
+#    ports:
+#    - 5000:5000
+#    logging:
+#      options:
+#        max-size: 10m
+#        max-file: '10'
 #  auth-mongodb:
 #    environment:
 #      MONGODB_PASSWORD: $MONGODB_PASSWORD
@@ -77,32 +77,32 @@ services:
       options:
         max-size: 10m
         max-file: '10'
-  hystrix-dashboard:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: mefiroofficial/hystrix-dashboard
-    depends_on:
-    - turbine-server
-    restart: always
-    ports:
-    - 9000:9000
-    logging:
-      options:
-        max-size: 10m
-        max-file: '10'
-  turbine-server:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: mefiroofficial/turbine-server
+#  hystrix-dashboard:
+#    environment:
+#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+#    image: mefiroofficial/hystrix-dashboard
 #    depends_on:
-#    - discovery-service
-    restart: always
-    ports:
-    - 8989:8989
-    logging:
-      options:
-        max-size: 10m
-        max-file: '10'
+#    - turbine-server
+#    restart: always
+#    ports:
+#    - 9000:9000
+#    logging:
+#      options:
+#        max-size: 10m
+#        max-file: '10'
+#  turbine-server:
+#    environment:
+#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+#    image: mefiroofficial/turbine-server
+##    depends_on:
+##    - discovery-service
+#    restart: always
+#    ports:
+#    - 8989:8989
+#    logging:
+#      options:
+#        max-size: 10m
+#        max-file: '10'
   user-core-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
@@ -120,8 +120,8 @@ services:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/user-core-service
-#    depends_on:
-#    - mysqldb
+    depends_on:
+    - mysqldb
     restart: always
     ports:
     - 9877:9876

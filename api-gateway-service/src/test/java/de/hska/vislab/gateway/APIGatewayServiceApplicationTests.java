@@ -9,16 +9,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = APIGatewayServiceApplication.class)
-@WebAppConfiguration
 public class APIGatewayServiceApplicationTests {
 
 	@Test
 	public void contextLoads() {
-	}
-
-	@Test
-	public void fire() {
-
 	}
 
 }

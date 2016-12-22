@@ -25,7 +25,7 @@ public class RoleController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<Long> postRole(@RequestBody(required = true) Role role) {
-		if (validate(role) && !validate(role.id)) {
+		if (!validate(role) || validate(role.id) || repo.getRoleByLevel(role.level) != null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
@@ -38,7 +38,7 @@ public class RoleController {
 		}
 	}
 
-	@RequestMapping(value = "/{level}", method = RequestMethod.GET)
+	@RequestMapping(value = "/level/{level}", method = RequestMethod.GET)
 	public ResponseEntity<Role> getRole(@PathVariable(name = "level", required = true) int level) {
 		Role role = repo.getRoleByLevel(level);
 

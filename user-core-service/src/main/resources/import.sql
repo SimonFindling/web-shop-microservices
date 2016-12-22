@@ -1,0 +1,1 @@
+INSERT INTO `webshop`.`user`(`id`,`firstname`,`lastname`,`password`,`roleid`,`username`) VALUES(1, 'Admini', 'Adminson', 'admin', 1, 'admin');

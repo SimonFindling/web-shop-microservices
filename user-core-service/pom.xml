@@ -13,7 +13,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<docker.port>10400</docker.port>
+		<docker.port>9876</docker.port>
 	</properties>
 
 	<dependencies>

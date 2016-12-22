@@ -3,6 +3,7 @@ package de.hska.vislab.composite.productcategory.controller;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.hska.vislab.composite.productcategory.model.Category;
 import de.hska.vislab.composite.productcategory.model.Product;
+import de.hska.vislab.composite.productcategory.restclient.CategoryCoreFallback;
 import de.hska.vislab.composite.productcategory.restclient.CategoryCoreRestClient;
+import de.hska.vislab.composite.productcategory.restclient.ProductCoreFallback;
 import de.hska.vislab.composite.productcategory.restclient.ProductCoreRestClient;
 
 @RestController
@@ -27,6 +30,16 @@ public class ProductCategoryController {
 
 	@Autowired
 	private CategoryCoreRestClient categoryClient;
+	
+	@Bean
+	public ProductCoreFallback productCoreFallback() {
+		return new ProductCoreFallback();
+	}
+	
+	@Bean
+	public CategoryCoreFallback categoryCoreFallback() {
+		return new CategoryCoreFallback();
+	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ResponseEntity<String> getInfo() {
