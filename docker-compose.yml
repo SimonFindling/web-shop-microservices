@@ -1,42 +1,5 @@
 version: '2'
 services:
-#  config-service:
-#    environment:
-#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-#    image: mefiroofficial/config-service
-#    restart: always
-#    ports:
-#    - 8888:8888
-#    logging:
-#      options:
-#        max-size: 10m
-#        max-file: '10'
-#  oauth2-service:
-#    environment:
-#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-#      MONGODB_PASSWORD: $MONGODB_PASSWORD
-#    image: mefiroofficial/oauth2-service
-#    depends_on:
-#    - config-service
-#    - auth-mongodb
-#    restart: always
-#    ports:
-#    - 5000:5000
-#    logging:
-#      options:
-#        max-size: 10m
-#        max-file: '10'
-#  auth-mongodb:
-#    environment:
-#      MONGODB_PASSWORD: $MONGODB_PASSWORD
-#    image: mefiroofficial/oauth2-service-mongodb
-#    restart: always
-#    ports:
-#    - 25000:27017
-#    logging:
-#      options:
-#        max-size: 10m
-#        max-file: '10'
   mysqldb:
     environment:
       MYSQL_ROOT_PASSWORD: admin
@@ -52,11 +15,7 @@ services:
         max-size: 10m
         max-file: '10'
   discovery-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/discovery-service
-#    depends_on:
-#    - config-service
     restart: always
     ports:
     - 8761:8761
@@ -65,11 +24,7 @@ services:
         max-size: 10m
         max-file: '10'
   api-gateway-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/api-gateway-service
-#    depends_on:
-#    - discovery-service
     restart: always
     ports:
     - 4000:4000
@@ -77,38 +32,8 @@ services:
       options:
         max-size: 10m
         max-file: '10'
-#  hystrix-dashboard:
-#    environment:
-#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-#    image: mefiroofficial/hystrix-dashboard
-#    depends_on:
-#    - turbine-server
-#    restart: always
-#    ports:
-#    - 9000:9000
-#    logging:
-#      options:
-#        max-size: 10m
-#        max-file: '10'
-#  turbine-server:
-#    environment:
-#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-#    image: mefiroofficial/turbine-server
-##    depends_on:
-##    - discovery-service
-#    restart: always
-#    ports:
-#    - 8989:8989
-#    logging:
-#      options:
-#        max-size: 10m
-#        max-file: '10'
   user-core-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/user-core-service
-#    depends_on:
-#    - mysqldb
     restart: always
     ports:
     - 9876:9876
@@ -116,26 +41,19 @@ services:
       options:
         max-size: 10m
         max-file: '10'
-  user-core-service2:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: mefiroofficial/user-core-service
-    depends_on:
-    - mysqldb
-    restart: always
-    ports:
-    - 9877:9876
-    logging:
-      options:
-        max-size: 10m
-        max-file: '10'
+#  user-core-service2:
+##    environment:
+##      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+#    image: mefiroofficial/user-core-service
+#    restart: always
+#    ports:
+#    - 9877:9876
+#    logging:
+#      options:
+#        max-size: 10m
+#        max-file: '10'
   user-composite-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/user-composite-service
-#    depends_on:
-#    - user-core-service
-#    - role-core-service
     restart: always
     ports:
     - 10000:10000
@@ -144,11 +62,7 @@ services:
         max-size: 10m
         max-file: '10'
   product-core-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/product-core-service
-#    depends_on:
-#    - mysqldb
     restart: always
     ports:
     - 10100:10100
@@ -157,11 +71,7 @@ services:
         max-size: 10m
         max-file: '10'
   category-core-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/category-core-service
-#    depends_on:
-#    - mysqldb
     restart: always
     ports:
     - 10200:10200
@@ -170,11 +80,7 @@ services:
         max-size: 10m
         max-file: '10'
   role-core-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/role-core-service
-#    depends_on:
-#    - mysqldb
     restart: always
     ports:
     - 10400:10400
@@ -183,15 +89,19 @@ services:
         max-size: 10m
         max-file: '10'
   product-category-composite-service:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     image: mefiroofficial/product-category-composite-service
-#    depends_on:
-#    - product-core-service
-#    - category-core-service
     restart: always
     ports:
     - 10300:10300
+    logging:
+      options:
+        max-size: 10m
+        max-file: '10'
+  webshop-ui:
+    image: mefiroofficial/webshop-ui
+    restart: always
+    ports:
+    - 80:80
     logging:
       options:
         max-size: 10m

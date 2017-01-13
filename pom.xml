@@ -31,18 +31,19 @@
 	</properties>
 
 	<modules>
-		<module>config-service</module>
-		<module>oauth2-service</module>
+<!-- 		<module>config-service</module> -->
+<!-- 		<module>oauth2-service</module> -->
 		<module>discovery-service</module>
 		<module>api-gateway-service</module>
-		<module>hystrix-dashboard</module>
-		<module>turbine-server</module>
+<!-- 		<module>hystrix-dashboard</module> -->
+<!-- 		<module>turbine-server</module> -->
 		<module>user-core-service</module>
 		<module>product-core-service</module>
 		<module>user-composite-service</module>
 		<module>category-core-service</module>
 		<module>product-category-composite-service</module>
 		<module>role-core-service</module>
+		<module>webshop-ui</module>
 	</modules>
 
 	<dependencies>
@@ -153,41 +154,41 @@
 				</plugins>
 			</build>
 		</profile>
-		<profile>
-			<id>parent</id>
-			<activation>
-				<file>
-					<exists>mongodb</exists>
-				</file>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>io.fabric8</groupId>
-						<artifactId>docker-maven-plugin</artifactId>
-						<version>${fabric.version}</version>
-						<executions>
-						</executions>
-						<configuration>
-							<authConfig>
-								<username>${docker.user}</username>
-								<password>${docker.pwd}</password>
-							</authConfig>
-							<images>
-								<image>
-									<name>${docker.user}/oauth2-service-mongodb</name>
-									<alias>oauth2-mongodb</alias>
-									<build>
-										<dockerFileDir>${project.basedir}/mongodb</dockerFileDir>
-									</build>
-									<run></run>
-								</image>
-							</images>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+<!-- 		<profile> -->
+<!-- 			<id>parent</id> -->
+<!-- 			<activation> -->
+<!-- 				<file> -->
+<!-- 					<exists>mongodb</exists> -->
+<!-- 				</file> -->
+<!-- 			</activation> -->
+<!-- 			<build> -->
+<!-- 				<plugins> -->
+<!-- 					<plugin> -->
+<!-- 						<groupId>io.fabric8</groupId> -->
+<!-- 						<artifactId>docker-maven-plugin</artifactId> -->
+<!-- 						<version>${fabric.version}</version> -->
+<!-- 						<executions> -->
+<!-- 						</executions> -->
+<!-- 						<configuration> -->
+<!-- 							<authConfig> -->
+<!-- 								<username>${docker.user}</username> -->
+<!-- 								<password>${docker.pwd}</password> -->
+<!-- 							</authConfig> -->
+<!-- 							<images> -->
+<!-- 								<image> -->
+<!-- 									<name>${docker.user}/oauth2-service-mongodb</name> -->
+<!-- 									<alias>oauth2-mongodb</alias> -->
+<!-- 									<build> -->
+<!-- 										<dockerFileDir>${project.basedir}/mongodb</dockerFileDir> -->
+<!-- 									</build> -->
+<!-- 									<run></run> -->
+<!-- 								</image> -->
+<!-- 							</images> -->
+<!-- 						</configuration> -->
+<!-- 					</plugin> -->
+<!-- 				</plugins> -->
+<!-- 			</build> -->
+<!-- 		</profile> -->
 	</profiles>
 
 	<build>

@@ -12,4 +12,4 @@ before_script:
     - docker-compose up -d
 after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PWD
-  - docker push
+  - mvn:docker push
