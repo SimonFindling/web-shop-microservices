@@ -103,9 +103,6 @@
 										<tags>
 											<tag>latest</tag>
 										</tags>
-										<env>
-											<CONFIG_SERVICE_PASSWORD>${env.CONFIG_SERVICE_PASSWORD}</CONFIG_SERVICE_PASSWORD>
-										</env>
 										<ports>
 											<port>${docker.port}</port>
 										</ports>
@@ -143,9 +140,6 @@
 										<ports>
 											<port>${docker.port}:${docker.port}</port>
 										</ports>
-										<env>
-											<CONFIG_SERVICE_PASSWORD>${env.CONFIG_SERVICE_PASSWORD}</CONFIG_SERVICE_PASSWORD>
-										</env>
 									</run>
 								</image>
 							</images>

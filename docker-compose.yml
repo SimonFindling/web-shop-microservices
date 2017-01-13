@@ -9,7 +9,7 @@ services:
     image: mysql
     restart: always
     ports:
-    - 3307:3306
+    - 3306:3306
     logging:
       options:
         max-size: 10m
@@ -101,7 +101,7 @@ services:
     image: mefiroofficial/webshop-ui
     restart: always
     ports:
-    - 80:80
+    - 8082:8082
     logging:
       options:
         max-size: 10m
