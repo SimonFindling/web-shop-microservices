@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{register.head}" />
+<link rel="stylesheet" type="text/css"
+	href="../bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="../bootstrap/css/bootstrap-theme.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="../bootstrap/css/custom.css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default " role="navigation">
+
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="http://www.iwi.hs-karlsruhe.de">Informatik</a>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div class="row">
+			<h2>Registrierung</h2>
+		</div>
+		<div class="row">
+			<div class="col-xs-8">
+				<form action="#" th:action="@{/register}" th:object="${user}" theme="simple" method="post">
+					<div class="form-group">
+						<label>Vorname*:</label> <input type="text" name="firstname"
+							value="" id="RegisterAction_firstname" class="form-control"
+							required="true" th:field="*{firstname}" />
+							 
+					</div>
+
+					<div class="form-group">
+						<label>Nachname*:</label> <input type="text" name="lastname"
+							value="" id="RegisterAction_lastname" class="form-control"
+							required="true" th:field="*{lastname}"/>
+					</div>
+
+					<div class="form-group">
+						<label>Username*:</label> <input type="text" name="username"
+							value="" id="RegisterAction_username" class="form-control"
+							required="true" th:field="*{username}"/>
+					</div>
+
+					<div class="form-group">
+						<label>Passwort*:</label> <input type="password" name="password1"
+							id="RegisterAction_password1" class="form-control"
+							required="true" th:field="*{password}"/>
+					</div>
+
+					<div class="form-group">
+						<label>Passwort(wiederh.)*:</label> <input type="password"
+							name="password2" id="RegisterAction_password2"
+							class="form-control" required="true" th:field="*{passwordWdh}" />
+					</div>
+					<input type="submit" id="RegisterAction_register_submit"
+						name="method:execute" value="Registrieren" class="btn btn-success"
+						align="center" />
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div th:if="${messages != null}">
+		<ul class="errorMessage" th:each="message : ${messages}">
+			<font color="red">
+				<li class="errorMessage" th:text="${message}" />
+			</font>
+		</ul>
+	</div>
+</body>
+</html>

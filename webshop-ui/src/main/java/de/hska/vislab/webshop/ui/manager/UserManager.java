@@ -5,9 +5,9 @@ import de.hska.vislab.webshop.ui.model.User;
 
 public interface UserManager {
 
-	public void registerUser(String username, String name, String lastname, String password, Role role);
+	public boolean registerUser(String username, String name, String lastname, String password, Role role);
 
-	public void registerUser(User user);
+	public boolean registerUser(User user);
 	
 	public User getUserByUsername(String username);
 

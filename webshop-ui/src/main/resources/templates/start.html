@@ -1,14 +1,104 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<title th:text="#{startpage.head}"></title>
-		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css"/>
-		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-theme.min.css"/>
-		<link rel="stylesheet" type="text/css" href="bootstrap/css/custom.css"/>
-		<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-		<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-	</head>
-	<body>
-		<p th:text="${user}"/>
-	</body>
+<head>
+<title th:text="#{startpage.head}"></title>
+<link rel="stylesheet" type="text/css"
+	href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="bootstrap/css/bootstrap-theme.min.css" />
+<link rel="stylesheet" type="text/css" href="bootstrap/css/custom.css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="http://www.iwi.hs-karlsruhe.de">Informatik</a>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="/start">Alle Produkte</a>
+					</li>
+					<li th:if="${user.role.level == 0}">
+						<a href="/add" th:text="#{product.add}"></a>
+					</li>
+					<li th:if="${user.role.level == 0}">
+						<a href="/edit" th:text="#{categories.edit}"></a>
+					</li>
+				</ul>
+				<div>
+					<nav class="nav navbar-nav navbar-right">
+						<li>
+							<a href="/logout">Logout</a>
+						</li>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="row" th:text="#{login.status} + ' ' + ${user.firstname} + ' ' + ${user.lastname}"></div>
+		<div class="row">
+			<div class="col-xs-8">
+				<h3 th:text="#{search.title}"></h3>
+				<form action="#" th:action="@{/search}" th:object="${search}" method="post"
+					theme="simple">
+					<div class="form-group">
+						<label>Suchtext:</label> <input type="text" name="searchValue"
+							value="" id="SearchAction_searchValue" class="form-control"
+							th:field="*{searchValue}" />
+					</div>
+					<div class="form-group">
+						<label>Preis min.:</label> <input type="text"
+							name="searchMinPrice" value="" id="SearchAction_searchMinPrice"
+							class="form-control" th:field="*{minPrice}" />
+					</div>
+					<div class="form-group">
+						<label>Preis max.:</label> <input type="text"
+							name="searchMaxPrice" value="" id="SearchAction_searchMaxPrice"
+							class="form-control" th:field="*{maxPrice}" />
+					</div>
+					<div>
+						<input type="submit" id="SearchAction_search_submit"
+							name="method:execute" value="Suchen" class="btn btn-success" />
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<h3 th:text="#{products.title}"></h3>
+		</div>
+		<div id="startpage_products">
+			<table class="table table-striped">
+				<tr class="header">
+					<td th:text="#{product.nr}"></td>
+					<td th:text="#{product.name}"></td>
+					<td th:text="#{product.price}"></td>
+					<td th:text="#{product.category}"></td>
+					<td> </td>
+					<td th:if="${user.role.level == 0}"> </td>
+				</tr>
+				<tr th:if="${products != null}"	th:each="product,iter : ${products}">
+					<td class="${iter % 2 != 0 ? 'odd' : ''" th:text="${iter.index + 1}"></td>
+					<td class="${iter % 2 != 0 ? 'odd' : ''" th:text="${product.name}"></td>
+					<td class="${iter % 2 != 0 ? 'odd' : ''" th:text="${product.price}"></td>
+					<td class="${iter % 2 != 0 ? 'odd' : ''" th:text="${product.category.name}"></td>
+					<td class="${iter % 2 != 0 ? 'odd' : ''">
+						<a th:href="@{details(id=${product.id},searchValue=${search.searchValue}, searchMinPrice=${search.minPrice == null ? '' : search.minPrice}, searchMaxPrice=${search.maxPrice == null ? '' : search.maxPrice})}"> 
+							<img src="img/detBtn.png" th:attr="alt=#{product.details}" />
+						</a>
+					</td>
+					<td class="${iter % 2 != 0 ? 'odd' : ''" th:if="${user.role.level == 0}">
+						<a th:href="@{delete(id=${product.id},searchValue=${search.searchValue}, searchMinPrice=${search.minPrice == null ? '' : search.minPrice}, searchMaxPrice=${search.maxPrice == null ? '' : search.maxPrice})}"> 
+							<img src="img/delBtn.png" th:attr="alt=#{product.delete}" />
+						</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
 </html>

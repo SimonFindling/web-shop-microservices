@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import de.hska.uilab.composite.user.model.User;
 
-@FeignClient(value = "user-core-service", fallback = UserCoreFallback.class, decode404 = true)
+@FeignClient(value = "user-core-service", fallback = UserCoreFallback.class)
 public interface UserCoreRestClient {
 	@RequestMapping(method = RequestMethod.GET, value="/username/{username}")
 	public ResponseEntity<User> getUser(@PathVariable("username") String username);

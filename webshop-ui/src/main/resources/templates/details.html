@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>VS Labor Webshop mit Bootstrap 3</title>
+<link rel="stylesheet" type="text/css"
+	href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="bootstrap/css/bootstrap-theme.min.css" />
+<link rel="stylesheet" type="text/css" href="bootstrap/css/custom.css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="http://www.iwi.hs-karlsruhe.de">Informatik</a>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li><a href="/start">Alle Produkte</a></li>
+					<li th:if="${user.role.level == 0}"><a href="/add"
+						th:text="#{product.add}"></a></li>
+					<li th:if="${user.role.level == 0}"><a href="/edit"
+						th:text="#{categories.edit}"></a></li>
+				</ul>
+				<div>
+					<nav class="nav navbar-nav navbar-right">
+						<li><a href="/logout">Logout</a></li>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="row"
+			th:text="#{login.status} + ' ' + ${user.firstname} + ' ' + ${user.lastname}"></div>
+		<div class="row">
+			<h2 th:text="#{details.title}"></h2>
+		</div>
+		<table class="table table-striped" th:object="${product}">
+			<tr>
+				<td th:text="#{details.name}"></td>
+				<td th:text="*{name}"></td>
+			</tr>
+			<tr>
+				<td th:text="#{details.price}"></td>
+				<td th:text="*{price}"></td>
+			</tr>
+			<tr>
+				<td th:text="#{details.category}"></td>
+				<td th:text="*{category.name}"></td>
+			</tr>
+			<tr>
+				<td th:text="#{details.details}"></td>
+				<td th:text="*{details}"></td>
+			</tr>
+		</table>
+		<a
+			th:href="@{start(searchValue=${search.searchValue}, searchMinPrice=${search.minPrice}, searchMaxPrice=${search.maxPrice})}"
+			th:text="#{link.back}"></a>
+	</div>
+</body>
+</html>

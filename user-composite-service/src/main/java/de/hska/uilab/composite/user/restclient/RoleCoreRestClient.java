@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import de.hska.uilab.composite.user.model.Role;
 
-@FeignClient(value = "role-core-service", fallback = RoleCoreFallback.class, decode404 = true )
+@FeignClient(value = "role-core-service", fallback = RoleCoreFallback.class)
 public interface RoleCoreRestClient {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)

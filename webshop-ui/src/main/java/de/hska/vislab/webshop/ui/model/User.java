@@ -1,20 +1,46 @@
 package de.hska.vislab.webshop.ui.model;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class User {
 	
 	
 	private Long id;
-	@NotBlank(message = "#{error.username.required}")
+	@NotBlank(message = "error.username.required")
 	private String username;
 	private String lastname;
 	private String firstname;
-	@NotBlank(message = "#{error.password.required}")
+	@NotBlank(message = "error.password.required")
 	private String password;
+	@JsonIgnore
+	private String passwordWdh;
 	private Role role;
+
+	public User() { }
+	
+	public User(Long id, String username, String lastname, String firstname, String password, Role role) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.lastname = lastname;
+		this.firstname = firstname;
+		this.password = password;
+		this.role = role;
+	}
+
+	public User(Long id, String username, String lastname, String firstname, String password, String passwordWdh,
+			Role role) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.lastname = lastname;
+		this.firstname = firstname;
+		this.password = password;
+		this.passwordWdh = passwordWdh;
+		this.role = role;
+	}
 
 	public Long getId() {
 		return id;
@@ -56,6 +82,14 @@ public class User {
 		this.password = password;
 	}
 
+	public String getPasswordWdh() {
+		return passwordWdh;
+	}
+
+	public void setPasswordWdh(String passwordWdh) {
+		this.passwordWdh = passwordWdh;
+	}
+
 	public Role getRole() {
 		return role;
 	}
@@ -67,6 +101,8 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", lastname=" + lastname + ", firstname=" + firstname
-				+ ", password=" + password + ", role=" + role + "]";
+				+ ", password=" + password + ", passwordWdh=" + passwordWdh + ", role=" + role + "]";
 	}
+
+
 }

@@ -20,7 +20,9 @@ eureka:
 ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
-
+feign:
+  hystrix:
+    enabled: false
 #security:
 #  oauth2:
 #    resource:

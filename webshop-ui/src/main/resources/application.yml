@@ -9,13 +9,25 @@ eureka:
 ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
+logging:
+  level:
+    org.springframework.security: TRACE
+#    org.springframework.web: TRACE
+    org.hibernate: ERROR
 hystrix:
   command:
     default:
       execution:
         isolation:
-          thread:
-            timeoutInMilliseconds: 10000
-logging:
-  level:
-    org.springframework.security: TRACE
+          strategy: SEMAPHORE
+          semaphore: 
+            maxConcurrentRequests: 100000
+        timeout:
+          enabled: false
+      circuitBreaker:
+        enabled: false
+      fallback:
+        enabled: false        
+feign:
+  hystrix:
+    enabled: false

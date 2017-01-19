@@ -40,7 +40,7 @@ public class UserCompositeController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/register")
 	public ResponseEntity<Long> registerUser(@RequestBody(required = true) User user) {
-		if (!validate(user) && !validate(user.username) && !validate(user.password) && validate(user.id)) {
+		if (!validate(user) || !validate(user.username) || !validate(user.password) || validate(user.id)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		user.roleID = 2l;
@@ -160,6 +160,12 @@ public class UserCompositeController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "user/{id}")
+	public ResponseEntity<Void> deleteUser(@PathVariable(required = true, name = "id") long id) {
+		ResponseEntity<Void> response = userClient.deleteUser(id);
+		return new ResponseEntity<>(response.getStatusCode());
 	}
 
 	private boolean validate(Object obj) {

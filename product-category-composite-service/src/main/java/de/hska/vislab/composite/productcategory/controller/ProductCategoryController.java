@@ -30,12 +30,12 @@ public class ProductCategoryController {
 
 	@Autowired
 	private CategoryCoreRestClient categoryClient;
-	
+
 	@Bean
 	public ProductCoreFallback productCoreFallback() {
 		return new ProductCoreFallback();
 	}
-	
+
 	@Bean
 	public CategoryCoreFallback categoryCoreFallback() {
 		return new CategoryCoreFallback();
@@ -128,8 +128,9 @@ public class ProductCategoryController {
 	}
 
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
-	public ResponseEntity<Iterable<Category>> getCategories() {
-		return categoryClient.getCategories("");
+	public ResponseEntity<Iterable<Category>> getCategories(
+			@RequestParam(defaultValue = "", required = false, name = "name") String name) {
+		return categoryClient.getCategories(name);
 	}
 
 	@RequestMapping(value = "/category", method = RequestMethod.POST)

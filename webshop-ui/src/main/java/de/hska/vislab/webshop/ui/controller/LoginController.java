@@ -1,6 +1,6 @@
 package de.hska.vislab.webshop.ui.controller;
 
-import java.util.Locale;
+import static de.hska.vislab.webshop.ui.util.Constants.*;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -8,81 +8,120 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import de.hska.vislab.webshop.ui.manager.UserManager;
 import de.hska.vislab.webshop.ui.model.User;
+import de.hska.vislab.webshop.ui.util.MessageBundleService;
+import de.hska.vislab.webshop.ui.util.ValidationService;
 
 @Controller
-@Scope("session")
 public class LoginController {
 
-	private static final Logger LOGGER = Logger.getLogger(LoginController.class.getSimpleName());
+	private static final Logger LOGGER = Logger.getLogger(LoginController.class.getCanonicalName());
 
 	@Autowired
-	private MessageSource messageSource;
+	private UserManager userManager;
 
-	private Locale locale = Locale.getDefault();
+	@Autowired
+	private ValidationService validator;
 
-	private HttpSession session;
-	private Set<String> messages;
+	@Autowired
+	private MessageBundleService bundleService;
+
 	private User loggedIn;
 
-	@GetMapping({ "/login", "/" })
-	public String loginForm(Model model) {
-		model.addAttribute("user", new User());
-		if (session != null && session.getAttribute("user") != null) {
-			return "start";
-		}
-
-		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-		session = attr.getRequest().getSession();
-
-		return "login";
-	}
-
-	@PostMapping("login")
-	public String login(@ModelAttribute @Valid User user, BindingResult result, Model model) {
-		if (result.hasErrors()) {
-			return "login";
-		}
-
-		LOGGER.fine(user.toString());
-		this.setLoggedIn(user);
-		// TODO get user from user-composite-service
-		if (user != null) {
-			// TODO compare with given user from user-composite-service
-			if (user.getPassword().equals("test")) {
-				session.setAttribute("user", user);
-				session.setAttribute("message", "");
-				return "start";
-			} else {
-				messages.add(messageSource.getMessage("error.password.wrong", null, locale));
-				model.addAttribute("messages", messages);
-				return "login";
+	@GetMapping({ PATH_LOGIN, PATH_BASE })
+	public String getLoginPage(Model model) {
+		model.addAttribute(ATTRIBUTE_USER, new User());
+		HttpSession session = getSession(false);
+		if (session != null) {
+			User user = (User) session.getAttribute(ATTRIBUTE_USER);
+			if (validator.isNotNull(user) && validator.isNotBlank(user.getUsername())
+					&& userManager.doesUserAlreadyExist(user.getUsername())) {
+				User response = userManager.getUserByUsername(user.getUsername());
+				LOGGER.info("response=" + response + ", user=" + user);
+				if (validator.isValidPassword(user, response)) {
+					session.setAttribute(ATTRIBUTE_USER, response);
+					session.setAttribute(ATTRIBUTE_MESSAGES, null);
+					return REDIRECT_START;
+				}
 			}
 		}
-		messages.add(messageSource.getMessage("error.username.wrong", null, locale));
-		model.addAttribute("messages", messages);
-		return "login";
+		return LOGIN;
+	}
 
+	@PostMapping(PATH_LOGIN)
+	@Scope(SCOPE_SESSION)
+	public String login(@ModelAttribute @Valid User user, BindingResult result, Model model) {
+		bundleService.resetMessages(model);
+
+		if (result.hasErrors()) {
+			String[] stringArray = new String[result.getErrorCount()];
+			int counter = 0;
+			for (ObjectError error : result.getAllErrors()) {
+				stringArray[counter] = error.getDefaultMessage();
+				counter++;
+			}
+			bundleService.addMessage(model, stringArray);
+			LOGGER.info("result.hasErrors=" + bundleService.getMessages());
+			return LOGIN;
+		}
+
+		LOGGER.info("user=" + user.toString());
+		User response = userManager.getUserByUsername(user.getUsername());
+		LOGGER.info("respone=" + response);
+		if (response != null) {
+			if (validator.isValidPassword(user, response)) {
+				HttpSession session = getSession(true);
+				session.setAttribute(ATTRIBUTE_USER, response);
+				session.setAttribute(ATTRIBUTE_MESSAGES, null);
+				LOGGER.info(response + " logged in");
+				return REDIRECT_START;
+			} else {
+				bundleService.addMessage(model, "error.password.wrong");
+
+				LOGGER.info(user.toString() + "password is wrong");
+				return LOGIN;
+			}
+		}
+		LOGGER.info(user.toString() + "username doesn't exist");
+		bundleService.addMessage(model, "error.username.wrong");
+		return LOGIN;
+
+	}
+
+	@GetMapping(PATH_LOGOUT)
+	public String logout() {
+		HttpSession session = getSession(false);
+		if (session != null) {
+			// session.removeAttribute(ATTRIBUTE_USER);
+			// session.removeAttribute(ATTRIBUTE_MESSAGES);
+			// session.removeAttribute(ATTRIBUTE_PRODUCTS);
+			// session.removeAttribute(ATTRIBUTE_PRODUCT);
+			session.invalidate();
+			session = null;
+		}
+		return REDIRECT_LOGIN;
+	}
+
+	public HttpSession getSession(boolean create) {
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		HttpSession session = attr.getRequest().getSession(create);
+		return session;
 	}
 
 	public Set<String> getMessages() {
-		return messages;
-	}
-
-	public void setMessages(Set<String> messages) {
-		this.messages = messages;
+		return bundleService.getMessages();
 	}
 
 	public User getLoggedIn() {
@@ -92,5 +131,4 @@ public class LoginController {
 	public void setLoggedIn(User loggedIn) {
 		this.loggedIn = loggedIn;
 	}
-
 }

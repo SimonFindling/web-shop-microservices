@@ -63,7 +63,7 @@
 
 					<div>
 						<p>
-							<a href="./pages/register.jsp">Noch nicht registriert?</a>
+							<a href="/register.html">Noch nicht registriert?</a>
 						</p>
 					</div>
 				</form>
@@ -82,7 +82,9 @@
 	</div>
 	<div th:if="${messages != null}">
 		<ul class="errorMessage" th:each="message : ${messages}">
-			<li><font color="red" th:text="${message}"> </font></li>
+		<font color="red">
+					<li class="errorMessage" th:text="${message}"/>
+		</font>
 		</ul>
 	</div>
 </body>

@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>VS Labor Webshop mit Bootstrap 3</title>
+<link rel="stylesheet" type="text/css"
+	href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="bootstrap/css/bootstrap-theme.min.css" />
+<link rel="stylesheet" type="text/css" href="bootstrap/css/custom.css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="http://www.iwi.hs-karlsruhe.de">Informatik</a>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li><a href="/start">Alle Produkte</a></li>
+					<li th:if="${user.role.level == 0}"><a href="/add"
+						th:text="#{product.add}"></a></li>
+					<li th:if="${user.role.level == 0}"><a href="/edit"
+						th:text="#{categories.edit}"></a></li>
+				</ul>
+				<div>
+					<nav class="nav navbar-nav navbar-right">
+						<li><a href="/logout">Logout</a></li>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="row"
+			th:text="#{login.status} + ' ' + ${user.firstname} + ' ' + ${user.lastname}"></div>
+		<div class="row">
+			<h2 th:text="#{product.add.title}"></h2>
+		</div>
+		<div class="row">
+			<div class="col-xs-8">
+
+				<form action="#" th:action="@{/add}" theme="simple"
+					focusElement="name" th:object="${product}" method="post">
+					<div class="form-group">
+						<label>Produktname*:</label> <input type="text" name="name"
+							value="" id="AddProductAction_name" class="form-control"
+							required="true" th:field="*{name}"/>
+					</div>
+
+					<div class="form-group">
+						<label>Preis*:</label> <input type="text" name="price" value=""
+							id="AddProductAction_price" class="form-control" required="true" 
+							th:field="*{price}"/>
+					</div>
+
+					<div class="form-group">
+						<label>Kategorie*:</label> <select name="categoryId"
+							id="AddProductAction_categoryId" class="form-control"
+							required="true" th:field="*{category.id}" th:if="${categories != null}" th:each="category : ${categories}">
+							<option th:value="${category.id}"  th:text="${category.name}"></option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label>Beschreibung*:</label>
+						<textarea name="details" cols="15" rows="3"
+							id="AddProductAction_details" class="form-control"></textarea>
+					</div>
+					<input type="submit" id="AddProductAction_product_submit"
+						name="method:execute" value="Hinzuf&uuml;gen"
+						class="btn btn-success" /> <input type="reset"
+						name="product.reset" value="Zur&uuml;cksetzen"
+						class="btn btn-default" />
+				</form>
+
+				<div th:if="${messages != null}">
+					<ul class="errorMessage" th:each="message : ${messages}">
+						<font color="red">
+							<li class="errorMessage" th:text="${message}" />
+						</font>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
