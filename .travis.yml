@@ -8,8 +8,6 @@ services:
 # see https://docs.travis-ci.com/user/languages/java/
 language: java
 jdk: oraclejdk8
-before_script:
-    - docker-compose up -d
 after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PWD
   - mvn:docker push
