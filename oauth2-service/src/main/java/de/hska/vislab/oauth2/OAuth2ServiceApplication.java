@@ -25,7 +25,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
-import de.hska.vislab.oauth2.service.security.MongoUserDetailsService;
+import de.hska.vislab.oauth2.service.security.WebshopUserDetailsService;
 
 @SpringBootApplication
 @EnableResourceServer
@@ -36,14 +36,65 @@ public class OAuth2ServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OAuth2ServiceApplication.class, args);
 	}
+	
+	@Configuration
+	@EnableAuthorizationServer
+	protected static class OAuth2AuthorizationConfiguration extends AuthorizationServerConfigurerAdapter {
+		private static final String PASSWORD = "Welcome1";
+		
+		private TokenStore tokenStore = new InMemoryTokenStore();
+		
+		@Autowired
+		@Qualifier("authenticationManagerBean")
+		private AuthenticationManager authenticationManager;
+		
+		@Autowired
+		private WebshopUserDetailsService userDetailsService;
+
+		@Override
+		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+			 // @formatter:off
+			 clients.inMemory().withClient("webshop-ui").authorizedGrantTypes("refresh_token",
+			 "password").scopes("ui")
+			 .and().withClient("user-core-service").secret(PASSWORD)
+			 .authorizedGrantTypes("client_credentials",
+			 "refresh_token").scopes("server").and()
+			 .withClient("user-composite-service").secret(PASSWORD).authorizedGrantTypes("client_credentials",
+			 "refresh_token").scopes("server").and()
+			 .withClient("role-core-service").secret(PASSWORD)
+			 .authorizedGrantTypes("client_credentials",
+			 "refresh_token").scopes("server").and()
+			 .withClient("product-core-service").secret(PASSWORD)
+			 .authorizedGrantTypes("client_credentials",
+			 "refresh_token").scopes("server").and()
+			 .withClient("product-category-composite-service").secret(PASSWORD)
+			 .authorizedGrantTypes("client_credentials",
+			 "refresh_token").scopes("server").and()
+			 .withClient("category-core-service").secret(PASSWORD)
+			 .authorizedGrantTypes("client_credentials",
+			 "refresh_token").scopes("server");
+			 // @formatter:on
+		}
+		
+		@Override
+		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+			endpoints.tokenStore(tokenStore).authenticationManager(authenticationManager)
+					.userDetailsService(userDetailsService);
+		}
+		
+		@Override
+		public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+			oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
+		}
+	}
 
 	@Configuration
 	@EnableWebSecurity
 	protected static class webSecurityConfig extends WebSecurityConfigurerAdapter {
-
+		
 		@Autowired
-		private MongoUserDetailsService userDetailsService;
-
+		private WebshopUserDetailsService userDetailsService;
+		
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			// @formatter:off
@@ -53,62 +104,12 @@ public class OAuth2ServiceApplication {
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
-		}
+			auth.userDetailsService(userDetailsService);		}
 
 		@Override
 		@Bean
 		public AuthenticationManager authenticationManagerBean() throws Exception {
 			return super.authenticationManagerBean();
-		}
-	}
-
-	@Configuration
-	@EnableAuthorizationServer
-	protected static class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
-
-		private TokenStore tokenStore = new InMemoryTokenStore();
-
-		@Autowired
-		@Qualifier("authenticationManagerBean")
-		private AuthenticationManager authenticationManager;
-
-		@Autowired
-		private MongoUserDetailsService userDetailsService;
-
-		@Autowired
-		private Environment env;
-
-		@Override
-		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
-			// TODO add real clients.
-
-			// @formatter:off
-			// clients.inMemory().withClient("browser").authorizedGrantTypes("refresh_token",
-			// "password").scopes("ui")
-			// .and().withClient("account-service").secret(env.getProperty("ACCOUNT_SERVICE_PASSWORD"))
-			// .authorizedGrantTypes("client_credentials",
-			// "refresh_token").scopes("server").and()
-			// .withClient("statistics-service").secret(env.getProperty("STATISTICS_SERVICE_PASSWORD"))
-			// .authorizedGrantTypes("client_credentials",
-			// "refresh_token").scopes("server").and()
-			// .withClient("notification-service").secret(env.getProperty("NOTIFICATION_SERVICE_PASSWORD"))
-			// .authorizedGrantTypes("client_credentials",
-			// "refresh_token").scopes("server");
-			// @formatter:on
-		}
-
-		@Override
-		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-			endpoints.tokenStore(tokenStore).authenticationManager(authenticationManager)
-					.userDetailsService(userDetailsService);
-			;
-		}
-
-		@Override
-		public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-			oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
 		}
 	}
 }

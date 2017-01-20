@@ -31,8 +31,13 @@ eureka:
 ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
-
-#security:
-#  oauth2:
-#    resource:
-#      user-info-uri: http://auth-service:5000/uaa/users/current
+security:
+  oauth2:
+    client:
+      clientId: user-core-service
+      clientSecret: Welcome1
+      accessTokenUri: http://oauth2-service:5000/uaa/oauth/token
+      grant-type: client_credentials
+      scope: server
+    resource:
+      user-info-uri: http://oauth2-service:5000/uaa/users/current

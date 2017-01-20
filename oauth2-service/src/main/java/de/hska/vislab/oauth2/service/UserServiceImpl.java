@@ -1,37 +1,40 @@
 package de.hska.vislab.oauth2.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import de.hska.vislab.oauth2.client.UserCompositeClient;
 import de.hska.vislab.oauth2.domain.User;
-import de.hska.vislab.oauth2.repository.UserRepository;
-
 
 @Service
 public class UserServiceImpl implements UserService {
 
-	private final Logger log = LoggerFactory.getLogger(getClass());
-
-	private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class.getCanonicalName());
 
 	@Autowired
-	private UserRepository repository;
+	private UserCompositeClient client;
 
 	@Override
 	public void create(User user) {
+		try {
+			User existing = client.getUser(user.getUsername()).getBody();
+			Assert.isNull(existing, "user already exists: " + user.getUsername());
 
-		User existing = repository.findOne(user.getUsername());
-		Assert.isNull(existing, "user already exists: " + user.getUsername());
-
-		String hash = encoder.encode(user.getPassword());
-		user.setPassword(hash);
-
-		repository.save(user);
-
-		log.info("new user has been created: {}", user.getUsername());
+			ResponseEntity<Long> response = client.registerUser(user);
+			if (response.getStatusCode().equals(HttpStatus.CREATED)) {
+				user = client.getUser(response.getBody()).getBody();
+				LOGGER.info("new user has been created: " + user.getUsername());
+				return;
+			}
+		} catch (Exception e) {
+			LOGGER.info(e.getMessage());
+			e.printStackTrace();
+		}
+		LOGGER.info("User creation failed");
 	}
 }
