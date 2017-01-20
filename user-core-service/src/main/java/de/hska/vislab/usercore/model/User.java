@@ -1,14 +1,21 @@
 package de.hska.vislab.usercore.model;
 
+import java.util.Collection;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 @Entity
-public class User {
+public class User  implements UserDetails {
 
+	private static final long serialVersionUID = 5777706011673120786L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
@@ -100,5 +107,41 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", firstname=" + firstname + ", lastname=" + lastname
 				+ ", password=" + password + ", roleID=" + roleID + "]";
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Hier je nach Rolle Services einfügen?
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	@Override
+	public String getUsername() {
+		return username;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }

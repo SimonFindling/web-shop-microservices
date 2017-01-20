@@ -1,10 +1,12 @@
 package de.hska.vislab.usercore.controller;
 
+import java.security.Principal;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,7 @@ public class UserController {
 	@Autowired
 	private UserRepository repo;
 
+	@PreAuthorize("#oauth2.hasScope('server')")
 	@RequestMapping(method = RequestMethod.POST, value = "/")
 	public ResponseEntity<Long> postUser(@RequestBody(required = true) User user) {
 		if (validate(user.id) || !validate(user.roleID) || repo.getUserByUsername(user.username) != null) {
@@ -39,11 +42,13 @@ public class UserController {
 		
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server')")
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public ResponseEntity<Iterable<User>> getAllUsers() {
 		return new ResponseEntity<>(repo.findAll(), HttpStatus.OK);
 	}
 	
+	@PreAuthorize("#oauth2.hasScope('server')")
 	@RequestMapping(method = RequestMethod.GET, value = "/username/{username}")
 	public ResponseEntity<User> getUser(@PathVariable("username") String username) {
 		if (!validate(username)) {
@@ -60,6 +65,7 @@ public class UserController {
 		}
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server')")
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<User> getUser(@PathVariable("id") long id) {
 		if (!validate(id)) {
@@ -76,6 +82,7 @@ public class UserController {
 		}
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server')")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) {
 		if (!validate(id)) {
@@ -91,6 +98,11 @@ public class UserController {
 		else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@RequestMapping(value = "/current", method = RequestMethod.GET)
+	public Principal getUser(Principal principal) {
+		return principal;
 	}
 	
 	private boolean validate(Object obj) {

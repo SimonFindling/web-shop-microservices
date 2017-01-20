@@ -1,7 +1,6 @@
-logging:
-  level:
-    org.springframework.security: TRACE
-    
+#logging:
+#  level:
+#    org.springframework.security: TRACE 
 hystrix:
   command:
     default:
@@ -33,11 +32,5 @@ ribbon:
   ConnectTimeout: 20000
 security:
   oauth2:
-    client:
-      clientId: user-core-service
-      clientSecret: Welcome1
-      accessTokenUri: http://oauth2-service:5000/uaa/oauth/token
-      grant-type: client_credentials
-      scope: server
     resource:
-      user-info-uri: http://oauth2-service:5000/uaa/users/current
+      user-info-uri: http://user-core-service:9876/current
