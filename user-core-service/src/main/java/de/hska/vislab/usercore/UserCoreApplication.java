@@ -85,12 +85,10 @@ public class UserCoreApplication {
 
 		@Override
 		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
-			// TODO persist clients details
-
-			// @formatter:off
 			clients.inMemory().withClient("browser").authorizedGrantTypes("refresh_token", "password").scopes("ui")
-					.and().withClient("user-composite-service").secret(PASSWORD)
+					.and().withClient("webshop-ui").secret(PASSWORD)
+					.authorizedGrantTypes("client_credentials", "refresh_token").scopes("server").and()
+					.withClient("user-composite-service").secret(PASSWORD)
 					.authorizedGrantTypes("client_credentials", "refresh_token").scopes("server").and()
 					.withClient("product-category-composite-service").secret(PASSWORD)
 					.authorizedGrantTypes("client_credentials", "refresh_token").scopes("server").and()
@@ -100,7 +98,6 @@ public class UserCoreApplication {
 					.authorizedGrantTypes("client_credentials", "refresh_token").scopes("server").and()
 					.withClient("category-core-service").secret(PASSWORD)
 					.authorizedGrantTypes("client_credentials", "refresh_token").scopes("server");
-			// @formatter:on
 		}
 
 		@Override

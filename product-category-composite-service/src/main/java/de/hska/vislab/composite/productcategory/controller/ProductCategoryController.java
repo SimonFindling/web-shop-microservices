@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,11 +42,13 @@ public class ProductCategoryController {
 		return new CategoryCoreFallback();
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ResponseEntity<String> getInfo() {
 		return new ResponseEntity<>("This is product-category-composite-service", HttpStatus.OK);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/product", method = RequestMethod.GET)
 	public ResponseEntity<Iterable<Product>> getProducts(@RequestParam(name = "name", required = false) String name,
 			@RequestParam(name = "min", required = false) Double min,
@@ -76,6 +79,7 @@ public class ProductCategoryController {
 		return new ResponseEntity<>(products, HttpStatus.OK);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/product", method = RequestMethod.POST)
 	public ResponseEntity<Long> postProduct(@RequestBody(required = true) Product product) {
 		if (!validate(product) || validate(product.id)) {
@@ -94,6 +98,7 @@ public class ProductCategoryController {
 		return response;
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Product> getProduct(@PathVariable(name = "id", required = true) long id) {
 		ResponseEntity<Product> productResponse = productClient.getProduct(id);
@@ -109,6 +114,7 @@ public class ProductCategoryController {
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/product/{id}/category", method = RequestMethod.GET)
 	public ResponseEntity<Category> getCategoryForProduct(@PathVariable(name = "id", required = true) long id) {
 		ResponseEntity<Product> productResponse = productClient.getProduct(id);
@@ -121,28 +127,33 @@ public class ProductCategoryController {
 				? new ResponseEntity<>(categoryResponse.getBody(), categoryResponse.getStatusCode())
 				: new ResponseEntity<>(categoryResponse.getStatusCode());
 	}
-
+	
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteProduct(@PathVariable(required = true, name = "id") long id) {
 		return productClient.deleteProduct(id);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public ResponseEntity<Iterable<Category>> getCategories(
 			@RequestParam(defaultValue = "", required = false, name = "name") String name) {
 		return categoryClient.getCategories(name);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/category", method = RequestMethod.POST)
 	public ResponseEntity<Long> postCategory(@RequestBody(required = true) Category category) {
 		return categoryClient.postCategory(category);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/category/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Category> getCategory(@PathVariable(name = "id", required = true) long id) {
 		return categoryClient.getCategory(id);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/category/{id}/products", method = RequestMethod.GET)
 	public ResponseEntity<Iterable<Product>> getProductsOfCategory(
 			@PathVariable(name = "id", required = true) long id) {
@@ -163,6 +174,7 @@ public class ProductCategoryController {
 		return new ResponseEntity<>(products, HttpStatus.OK);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(value = "/category/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteCategory(@PathVariable(name = "id", required = true) long id) {
 		ResponseEntity<Category> response = getCategory(id);

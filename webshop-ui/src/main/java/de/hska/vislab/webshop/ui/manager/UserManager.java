@@ -16,4 +16,6 @@ public interface UserManager {
 	public Role getRoleByLevel(int level);
 
 	public boolean doesUserAlreadyExist(String username);
+	
+	public boolean login(String username, String password);
 }

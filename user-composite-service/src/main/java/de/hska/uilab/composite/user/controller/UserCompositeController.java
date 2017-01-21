@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ public class UserCompositeController {
 		return new UserCoreFallback();
 	}
 	
+//	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(method = RequestMethod.POST, value = "/register")
 	public ResponseEntity<Long> registerUser(@RequestBody(required = true) User user) {
 		if (!validate(user) || !validate(user.username) || !validate(user.password) || validate(user.id)) {
@@ -53,6 +55,7 @@ public class UserCompositeController {
 		}
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(method = RequestMethod.GET, value = "/user")
 	public ResponseEntity<Iterable<User>> getAllUsers() {
 		ResponseEntity<Iterable<User>> userResponse = userClient.getAllUsers();
@@ -67,6 +70,7 @@ public class UserCompositeController {
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
 	public ResponseEntity<User> getUser(@PathVariable(name = "id", required = true) long id) {
 		if (!validate(id)) {
@@ -91,6 +95,7 @@ public class UserCompositeController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(method = RequestMethod.GET, value = "/user/{id}/role")
 	public ResponseEntity<Role> getRoleOfUser(@PathVariable(name = "id", required = true) long id) {
 		ResponseEntity<User> response = getUser(id);
@@ -102,6 +107,7 @@ public class UserCompositeController {
 		return new ResponseEntity<>(response.getBody().role, HttpStatus.OK);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(method = RequestMethod.GET, value = "/user/username/{username}")
 	public ResponseEntity<User> getUser(@PathVariable(name = "username", required = true) String username) {
 		if (!validate(username)) {
@@ -126,6 +132,7 @@ public class UserCompositeController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(method = RequestMethod.GET, value = "/user/username/{username}/role")
 	public ResponseEntity<Role> getRoleOfUser(@PathVariable(name = "username", required = true) String username) {
 		ResponseEntity<User> response = getUser(username);
@@ -137,6 +144,7 @@ public class UserCompositeController {
 		return new ResponseEntity<>(response.getBody().role, HttpStatus.OK);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(method = RequestMethod.GET, value = "/login")
 	public ResponseEntity<Role> login(@RequestParam(name = "username", required = true) String username,
 			@RequestParam(name = "password", required = true) String password) {
@@ -162,6 +170,7 @@ public class UserCompositeController {
 		}
 	}
 	
+	@PreAuthorize("#oauth2.hasScope('server') or #oauth2.hasScope('ui')")
 	@RequestMapping(method = RequestMethod.DELETE, value = "user/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable(required = true, name = "id") long id) {
 		ResponseEntity<Void> response = userClient.deleteUser(id);

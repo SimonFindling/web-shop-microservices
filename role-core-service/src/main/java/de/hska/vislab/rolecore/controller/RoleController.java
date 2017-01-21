@@ -3,6 +3,7 @@ package de.hska.vislab.rolecore.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +19,13 @@ public class RoleController {
 	@Autowired
 	private RoleRepository repo;
 
+	@PreAuthorize("#oauth2.hasScope('server')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ResponseEntity<Iterable<Role>> getAllRoles() {
 		return new ResponseEntity<>(repo.findAll(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server')")
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<Long> postRole(@RequestBody(required = true) Role role) {
 		if (!validate(role) || validate(role.id) || repo.getRoleByLevel(role.level) != null) {
@@ -38,6 +41,7 @@ public class RoleController {
 		}
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server')")
 	@RequestMapping(value = "/level/{level}", method = RequestMethod.GET)
 	public ResponseEntity<Role> getRole(@PathVariable(name = "level", required = true) int level) {
 		Role role = repo.getRoleByLevel(level);
@@ -49,6 +53,7 @@ public class RoleController {
 		}
 	}
 
+	@PreAuthorize("#oauth2.hasScope('server')")
 	@RequestMapping(method=RequestMethod.GET,value="/{id}")
 	public ResponseEntity<Role> getRole(@PathVariable(name = "id", required = true) long id) {
 		Role role = repo.findOne(id);

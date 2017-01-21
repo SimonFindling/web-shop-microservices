@@ -33,4 +33,5 @@ ribbon:
 security:
   oauth2:
     resource:
+      token-info-uri: http://user-core-service:9876/oauth/check_token
       user-info-uri: http://user-core-service:9876/current

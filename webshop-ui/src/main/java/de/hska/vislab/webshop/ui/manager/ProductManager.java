@@ -19,4 +19,5 @@ public interface ProductManager {
 	public boolean deleteProductsByCategoryId(Long categoryId);
 	
     public boolean deleteProductById(Long id);
+    
 }

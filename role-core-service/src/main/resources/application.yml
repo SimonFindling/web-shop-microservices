@@ -1,6 +1,6 @@
-logging:
-  level:
-    org.springframework.security: TRACE
+#logging:
+#  level:
+#    org.springframework.security: TRACE
     
 hystrix:
   command:
@@ -31,8 +31,14 @@ eureka:
 ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
-
-#security:
-#  oauth2:
-#    resource:
-#      user-info-uri: http://auth-service:5000/uaa/users/current
+security:
+  oauth2:
+    client:
+      clientId: role-core-service
+      clientSecret: Welcome1
+      accessTokenUri: http://user-core-service:9876/oauth/token
+      grant-type: client_credentials
+      scope: server
+    resource:
+      token-info-uri: http://user-core-service:9876/oauth/check_token
+      user-info-uri: http://user-core-service:9876/current

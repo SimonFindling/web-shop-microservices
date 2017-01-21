@@ -78,9 +78,10 @@ public class LoginController {
 		}
 
 		LOGGER.info("user=" + user.toString());
-		User response = userManager.getUserByUsername(user.getUsername());
-		LOGGER.info("respone=" + response);
-		if (response != null) {
+		boolean loggedIn = userManager.login(user.getUsername(), user.getPassword());
+		LOGGER.info("loggedIn=" + loggedIn);
+		if (loggedIn) {
+			User response = userManager.getUserByUsername(user.getUsername());
 			if (validator.isValidPassword(user, response)) {
 				HttpSession session = getSession(true);
 				session.setAttribute(ATTRIBUTE_USER, response);
@@ -94,8 +95,8 @@ public class LoginController {
 				return LOGIN;
 			}
 		}
-		LOGGER.info(user.toString() + "username doesn't exist");
-		bundleService.addMessage(model, "error.username.wrong");
+		LOGGER.info(user.toString() + " username doesn't exist");
+		bundleService.addMessage(model, "Bad Credentials");
 		return LOGIN;
 
 	}

@@ -1,6 +1,6 @@
-logging:
-  level:
-    org.springframework.security: TRACE
+#logging:
+#  level:
+#    org.springframework.security: TRACE
     
 hystrix:
   command:
@@ -20,6 +20,9 @@ ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
 zuul:
+  ignore-security-headers: false
+  ignored-headers:
+    
   host:
     connect-timeout-millis: 20000
     socket-timeout-millis: 20000
